@@ -1,8 +1,17 @@
 import sqlalchemy
+from sqlalchemy import orm
 from .db_session import SqlAlchemyBase
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy_serializer import SerializerMixin
+
+
+association_table = sqlalchemy.Table('mangas_to_users', SqlAlchemyBase.metadata,
+                                     sqlalchemy.Column('mangas', sqlalchemy.Integer,
+                                                       sqlalchemy.ForeignKey('mangas.id')),
+                                     sqlalchemy.Column('users', sqlalchemy.Integer,
+                                                       sqlalchemy.ForeignKey('users.id'))
+                                     )
 
 
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
@@ -14,6 +23,8 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     email = sqlalchemy.Column(sqlalchemy.String, index=True,
                               unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+
+    mangas = orm.relation("Manga", secondary="mangas_to_users", backref="mangas")
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

@@ -18,4 +18,6 @@ class Manga(SqlAlchemyBase, SerializerMixin):
     translators = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     description = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
 
-    chapters = orm.relation('Chapters', back_populates='manga')
+    chapters = orm.relation('Chapter', back_populates='manga')
+
+    genres = orm.relation("Genre", secondary="mangas_to_genres", backref="mangas")
