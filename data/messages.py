@@ -4,14 +4,14 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import orm
 
 
-class Chapter(SqlAlchemyBase, SerializerMixin):
-    __tablename__ = 'chapters'
+class Message(SqlAlchemyBase, SerializerMixin):
+    __tablename__ = 'messages'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    content = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
 
-    manga_id = sqlalchemy.Column(sqlalchemy.Integer,
-                                 sqlalchemy.ForeignKey("mangas.id"))
-    manga = orm.relation('Manga')
+    user_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                sqlalchemy.ForeignKey("users.id"))
+    user = orm.relation('User')

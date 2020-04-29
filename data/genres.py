@@ -5,9 +5,9 @@ from sqlalchemy import orm
 
 
 association_table = sqlalchemy.Table('mangas_to_genres', SqlAlchemyBase.metadata,
-                                     sqlalchemy.Column('mangas', sqlalchemy.Integer,
+                                     sqlalchemy.Column('mangass', sqlalchemy.Integer,
                                                        sqlalchemy.ForeignKey('mangas.id')),
-                                     sqlalchemy.Column('genres', sqlalchemy.Integer,
+                                     sqlalchemy.Column('genress', sqlalchemy.Integer,
                                                        sqlalchemy.ForeignKey('genres.id'))
                                      )
 
@@ -19,4 +19,7 @@ class Genre(SqlAlchemyBase, SerializerMixin):
                            primary_key=True, autoincrement=True)
     name_of_genre = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
-    mangas = orm.relation("Manga", secondary="mangas_to_genres", backref="genres")
+    mangas = orm.relation("Manga", secondary="mangas_to_genres", backref="genress")
+
+    def __repr__(self):
+        return "<Genre> {} {}".format(str(self.id), self.name_of_genre)

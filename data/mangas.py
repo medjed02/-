@@ -20,4 +20,7 @@ class Manga(SqlAlchemyBase, SerializerMixin):
 
     chapters = orm.relation('Chapter', back_populates='manga')
 
-    genres = orm.relation("Genre", secondary="mangas_to_genres", backref="mangas")
+    genres = orm.relation("Genre", secondary="mangas_to_genres", backref="mangass")
+
+    def __repr__(self):
+        return "<Manga> {} {}".format(str(self.id), self.name)

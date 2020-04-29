@@ -26,6 +26,8 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     mangas = orm.relation("Manga", secondary="mangas_to_users", backref="mangas")
 
+    messages = orm.relation("Message", back_populates='user')
+
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
 
