@@ -1,6 +1,7 @@
 import sqlalchemy
 from .db_session import SqlAlchemyBase
 from sqlalchemy_serializer import SerializerMixin
+from sqlalchemy import orm
 
 
 class Manga(SqlAlchemyBase, SerializerMixin):
@@ -16,3 +17,5 @@ class Manga(SqlAlchemyBase, SerializerMixin):
     date_of_release = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     translators = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     description = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
+
+    chapters = orm.relation('Chapters', back_populates='manga')
