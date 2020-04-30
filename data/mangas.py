@@ -17,6 +17,7 @@ class Manga(SqlAlchemyBase, SerializerMixin):
     date_of_release = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     translators = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     description = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
+    cover = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     chapters = orm.relation('Chapter', back_populates='manga')
 
