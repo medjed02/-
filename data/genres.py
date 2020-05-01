@@ -18,6 +18,8 @@ class Genre(SqlAlchemyBase, SerializerMixin):
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     name_of_genre = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    cover = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    description = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
 
     mangas = orm.relation("Manga", secondary="mangas_to_genres", backref="genress")
 
