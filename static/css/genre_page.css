@@ -1,0 +1,40 @@
+.block1{
+    position: relative;
+    height: 200px;
+    width: 850px;
+    top: -300px;
+    left: 225px;
+}
+.block2{
+    position: relative;
+    height: 200px;
+    width: 850px;
+    top: -145px;
+    left: 215px;
+}
+.block3{
+    position: relative;
+    top: 0px;
+    left: 10px;
+}
+.block4{
+    position: relative;
+    top: 0px;
+    left: 10px;
+}
+.col-md6{
+    height: 400px;
+}
+.col-md7{
+    height: 230px;
+}
+.block5{
+    position: relative;
+    top: -195px;
+    left: 10px;
+}
+.block6{
+    position: relative;
+    top: 0px;
+    left: 37px;
+}
