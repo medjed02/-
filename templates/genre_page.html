@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/genre_page.css">
+</head>
+<div class="col-md6 border rounded">
+    <div class="block4">
+        <h1>{{genre.name_of_genre}}</h1>
+    </div>
+    <div class="block3">
+        <img width="200px" height="300px" src="{{genre.cover}}" alt="Изображение не найдено">
+    </div>
+    <div class="block1">
+        {{genre.description}}
+    </div>
+</div>
+{% for manga in genre.mangas%}
+<div class="col-md7 border rounded">
+    <div class="block4">
+        <h4>{{manga.name}}</h4>
+    </div>
+    <div class="block6">
+        <img width="100px" height="140px" src="{{manga.cover}}" alt="Изображение не найдено">
+    </div>
+    <div class="block2">
+        {{manga.description}}
+    </div>
+    <div class="block5">
+        <a href="/manga_page/{{manga.id}}" class="btn btn-warning">Перейти к главам</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
