@@ -1,0 +1,36 @@
+.block1{
+    position: relative;
+    height: 200px;
+    width: 850px;
+    top: -290px;
+    left: 225px;
+    line-height: 2;
+}
+.block2{
+    position: relative;
+    height: 200px;
+    width: 850px;
+    top: -325px;
+    left: 225px;
+}
+.block3{
+    position: relative;
+    top: 0px;
+    left: 10px;
+}
+.block4{
+    position: relative;
+    top: 0px;
+    left: 10px;
+}
+.block5{
+    position: relative;
+    top: -390px;
+    left: 14px;
+}
+.col-md6{
+    height: 400px;
+}
+.col-md7{
+    height: 30px;
+}

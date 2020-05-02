@@ -11,7 +11,7 @@ class Chapter(SqlAlchemyBase, SerializerMixin):
                            primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-
+    number = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     manga_id = sqlalchemy.Column(sqlalchemy.Integer,
                                  sqlalchemy.ForeignKey("mangas.id"))
     manga = orm.relation('Manga')
