@@ -29,16 +29,20 @@
         {{manga.description}}
     </div>
     <div class="block5">
-        <a href="/chapter_page/1" class="btn btn-warning">Читать с первой главы</a>
+        <a href="/chapter_page/{{manga.id}}/{{manga.chapters[0].id}}/1" class="btn btn-warning">Читать с первой главы</a>
+    </div>
+    <div class="block6">
+        {{manga.cnt_of_likes}}
+        <img width="70px" src="/static/img/shaka-like.png" alt="Изображение не найдено">
     </div>
 </div>
 <div class="block4">
     <h4>Список глав</h4>
 </div>
-{% for chapter in chapter_list%}
+{% for chapter in manga.chapters[::-1]%}
 <div class="col-md7 border rounded">
     <div class="block4">
-        <a href="/chapter_page/{{chapter.id}}">{{chapter.name}}</a>
+        <a href="/chapter_page/{{manga.id}}/{{chapter.id}}/1">{{chapter.name}}</a>
     </div>
 </div>
 {% endfor %}
