@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>{{title}}</title>
+    <style>
+     .image1{
+     text-align: center;
+     }
+     .image2{
+     text-align: center;
+     }
+     .block1{
+     position: fixed;
+     top: 680px;
+     left: 1320px;
+     }
+     .block2{
+     position: fixed;
+     top: 680px;
+     left: 80px;
+     }
+     .navbar-brand{
+     top: 10px;
+     left: 80px;
+     }
+     body{
+     height: 1220px;
+     }
+</style>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="/manga_page/{{manga.id}}">{{manga.name}}</a>
+    </nav>
+</header>
+{% if chapter.content.split('%')[page_number-1][-5] != 'B'%}
+{% if chapter.content.split('%')|length < page_number + 1 %}
+{% if manga.chapters[-1].id == chapter.id%}
+<p class="image1"><a href="/manga_page/{{manga.id}}">
+    <img src="/static/img/{{chapter.content.split('%')[page_number - 1]}}" alt="Изображение не найдено"></a></p>
+{% else %}
+<p class="image1"><a href="/chapter_page/{{manga.id}}/{{chapter.id + 1}}/1">
+    <img src="/static/img/{{chapter.content.split('%')[page_number - 1]}}" alt="Изображение не найдено"></a></p>
+{% endif %}
+{% else %}
+<p class="image1"><a href="/chapter_page/{{manga.id}}/{{chapter.id}}/{{page_number + 1}}">
+    <img src="/static/img/{{chapter.content.split('%')[page_number - 1]}}" alt="Изображение не найдено"></a></p>
+{% endif %}
+{% else %}
+{% if chapter.content.split('%')|length < page_number + 1 %}
+{% if manga.chapters[-1].id == chapter.id%}
+<p class="image2"><a href="/manga_page/{{manga.id}}">
+    <img width="1500px" src="/static/img/{{chapter.content.split('%')[page_number - 1]}}"
+         alt="Изображение не найдено"></a></p>
+{% else %}
+<p class="image2"><a href="/chapter_page/{{manga.id}}/{{chapter.id + 1}}/1">
+    <img width="1500px" src="/static/img/{{chapter.content.split('%')[page_number - 1]}}"
+         alt="Изображение не найдено"></a></p>
+{% endif %}
+{% else %}
+<p class="image2"><a href="/chapter_page/{{manga.id}}/{{chapter.id}}/{{page_number + 1}}">
+    <img width="1500px" src="/static/img/{{chapter.content.split('%')[page_number - 1]}}"
+         alt="Изображение не найдено"></a></p>
+{% endif %}
+{% endif %}
+<div class="block1">
+    {% if 0 > page_number - 2 %}
+    {% if manga.chapters[0].id == chapter.id%}
+    <a href="/manga_page/{{manga.id}}" class="btn btn-warning">ᐊ</a>
+    {% else %}
+    <a href="/chapter_page/{{manga.id}}/{{chapter.id - 1}}/{{manga.chapters[manga.chapters.index(chapter) - 1]
+    .content.split('%')|length}}" class="btn btn-warning">ᐊ</a>
+    {% endif %}
+    {% else %}
+    <a href="/chapter_page/{{manga.id}}/{{chapter.id}}/{{page_number - 1}}" class="btn btn-warning">ᐊ</a>
+    {% endif %}
+    {% if chapter.content.split('%')|length < page_number + 1 %}
+    {% if manga.chapters[-1].id == chapter.id%}
+    <a href="/manga_page/{{manga.id}}" class="btn btn-warning">ᐅ</a>
+    {% else %}
+    <a href="/chapter_page/{{manga.id}}/{{chapter.id + 1}}/1" class="btn btn-warning">ᐅ</a>
+    {% endif %}
+    {% else %}
+    <a href="/chapter_page/{{manga.id}}/{{chapter.id}}/{{page_number + 1}}" class="btn btn-warning">ᐅ</a>
+    {% endif %}
+</div>
+<div class="block2">
+    <div class="btn-group dropup">
+    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Страница {{page_number}} из {{chapter.content.split('%')|length}}
+    </button>
+    <div class="dropdown-menu">
+        {% for i in range(1, chapter.content.split('%')|length + 1)%}
+        <a class="dropdown-item" href="/chapter_page/{{manga.id}}/{{chapter.id}}/{{i}}">Страница {{i}} из
+        {{chapter.content.split('%')|length}}</a>
+        {% endfor %}
+    </div>
+    </div>
+</div>
+<main role="main" class="container">
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

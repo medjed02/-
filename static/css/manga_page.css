@@ -28,6 +28,13 @@
     top: -390px;
     left: 14px;
 }
+.block6{
+    position: relative;
+    top: -780px;
+    left: 960px;
+    font-size: 50px;
+    font-weight: 400;
+}
 .col-md6{
     height: 400px;
 }
