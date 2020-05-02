@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/manga_page.css">
+</head>
+<div class="col-md6 border rounded">
+    <div class="block4">
+        <h1>{{manga.name}}</h1>
+    </div>
+    <div class="block3">
+        <img width="200px" height="280px" src="{{manga.cover}}" alt="Изображение не найдено">
+    </div>
+    <div class="block1">
+        <strong>Автор: </strong>
+        {{manga.author}} <br>
+        <strong>Художник: </strong>
+        {{manga.painter}} <br>
+        <strong>Перевод: </strong>
+        {{manga.translate}} <br>
+        <strong>Дата релиза: </strong>
+        {{manga.date_of_release}} <br>
+        <strong>Переводчики: </strong>
+        {{manga.translators}} <br>
+    </div>
+    <div class="block2">
+        <strong>Описание: </strong>
+        {{manga.description}}
+    </div>
+    <div class="block5">
+        <a href="/chapter_page/1" class="btn btn-warning">Читать с первой главы</a>
+    </div>
+</div>
+<div class="block4">
+    <h4>Список глав</h4>
+</div>
+{% for chapter in chapter_list%}
+<div class="col-md7 border rounded">
+    <div class="block4">
+        <a href="/chapter_page/{{chapter.id}}">{{chapter.name}}</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
