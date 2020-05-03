@@ -8,6 +8,15 @@ from data.chapters import Chapter
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
+@app.route("/")
+def main_page():
+    session = db_session.create_session()
+    dop = session.query(Genre).all()
+    genres = []
+    for i in range(0, len(dop), 2):
+        genres.append([dop[i], dop[i + 1]])
+    return render_template("main_page.html", dop=genres, title="Мангеил")
+
 
 @app.route("/genre_page/<int:id>")
 def genre_page(id):

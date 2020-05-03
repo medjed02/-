@@ -24,9 +24,11 @@
 }
 .col-md6{
     height: 400px;
+    min-width: 1100px;
 }
 .col-md7{
     height: 230px;
+    min-width: 1100px;
 }
 .block5{
     position: relative;

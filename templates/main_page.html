@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/main_page.css">
+</head>
+<br>
+<div class="heading_block display1">
+    <h1>Жанры</h1>
+</div>
+{% for genres in dop %}
+    {% for genre in genres %}
+    <a href="genre_page/{{genre.id}}">
+        <div class="border border-dark block">
+                <div class="name_block">
+                    <h2>{{genre.name_of_genre}}</h2>
+                </div>
+                <div class="rounded-circle image_block">
+                     <img class="rounded-circle" width="200px" height="280px" src="{{genre.cover}}" alt="Изображение не найдено">
+                </div>
+                <div class="description_block ">
+                    <p>{{genre.description}}</p>
+                </div>
+            </div>
+    </a>
+    {% endfor %}
+    <br>
+{% endfor %}
+{% endblock %}
