@@ -1,3 +1,7 @@
+html, body{
+    overflow-x:hidden;
+}
+
 .block1{
     position: relative;
     height: 200px;
@@ -36,8 +40,10 @@
     font-weight: 400;
 }
 .col-md6{
+    min-width: 1100px;
     height: 450px;
 }
 .col-md7{
+    min-width: 1100px;
     height: 30px;
 }

@@ -1,0 +1,43 @@
+.heading_block {
+    color: rgb(73, 112, 230);
+    text-align: center;
+}
+
+.block {
+     position: relative;
+     width: 400px;
+     height: 360px;
+     left: 80px;
+     top: 0px;
+     float: left;
+     background: rgb(245, 174, 235);
+     margin: 0 150px 15px 0;
+     min-width: 400px;
+     border-radius: 100px 100px 100px 100px;
+}
+
+.description_block {
+    position: relative;
+    width: 145px;
+    height: 240px;
+    top: -250px;
+    left: 235px;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    color: rgb(73, 112, 230);
+    }
+
+.name_block {
+    position: relative;
+    left: 20px;
+    top: 20px;
+    text-align: center;
+    color: rgb(73, 112, 230);
+}
+
+.image_block {
+    position: relative;
+    left: 20px;
+    top: 20px;
+}
