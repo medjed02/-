@@ -23,6 +23,11 @@
         {{manga.date_of_release}} <br>
         <strong>Переводчики: </strong>
         {{manga.translators}} <br>
+        <strong>Жанры: </strong>
+        {% for genre in manga.genres%}
+        <a href="/genre_page/{{genre.id}}">{{genre.name_of_genre}}</a>{% if manga.genres[-1] != genre %},
+        {% endif %}
+        {% endfor %}
     </div>
     <div class="block2">
         <strong>Описание: </strong>
