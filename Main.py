@@ -7,6 +7,7 @@ from data.chapters import Chapter
 from data.register_form import RegisterForm
 from data.login_form import LoginForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+import os
 
 
 app = Flask(__name__)
@@ -45,6 +46,14 @@ def register():
         )
         user.set_password(form.password.data)
         session.add(user)
+        session.commit()
+        if form.image.data is not None:
+            image_file = form.image.data
+            image_filename = "static/img/" + str(user.id) + "_avatar"
+            image_file.save(os.path.join(image_filename))
+        else:
+            image_filename = ""
+        user.avatar = image_filename
         session.commit()
         login_user(user, remember=False)
         return redirect("/")
