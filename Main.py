@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 from data import db_session
 from data.genres import Genre
 from data.users import User
@@ -22,14 +22,20 @@ def load_user(user_id):
     return session.query(User).get(user_id)
 
 
-@app.route("/")
+@app.route("/", methods=['POST', 'GET'])
 def main_page():
-    session = db_session.create_session()
-    dop = session.query(Genre).all()
-    genres = []
-    for i in range(0, len(dop), 2):
-        genres.append([dop[i], dop[i + 1]])
-    return render_template("main_page.html", dop=genres, title="Мангеил")
+    if request.method == 'GET':
+        session = db_session.create_session()
+        dop = session.query(Genre).all()
+        genres = []
+        for i in range(0, len(dop), 2):
+            genres.append([dop[i], dop[i + 1]])
+        return render_template("main_page.html", dop=genres, title="Мангеил")
+    elif request.method == 'POST':
+        if request.form['input-search']:
+            return redirect(f"/search/{request.form['input-search']}")
+        else:
+            return redirect("/")
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -72,6 +78,7 @@ def login():
         return render_template('login_page.html',
                                message="Неправильный адрес почты или пароль",
                                form=form)
+
     return render_template('login_page.html', form=form)
 
 
@@ -82,18 +89,30 @@ def logout():
     return redirect("/")
 
 
-@app.route("/genre_page/<int:id>")
+@app.route("/genre_page/<int:id>", methods=['POST', 'GET'])
 def genre_page(id):
-    session = db_session.create_session()
-    genre = session.query(Genre).filter(Genre.id == id).first()
-    return render_template("genre_page.html", genre=genre, title=genre.name_of_genre)
+    if request.method == "GET":
+        session = db_session.create_session()
+        genre = session.query(Genre).filter(Genre.id == id).first()
+        return render_template("genre_page.html", genre=genre, title=genre.name_of_genre)
+    elif request.method == 'POST':
+        if request.form['input-search']:
+            return redirect(f"/search/{request.form['input-search']}")
+        else:
+            return redirect(f"genre_page/{id}")
 
 
-@app.route("/manga_page/<int:id>")
+@app.route("/manga_page/<int:id>", methods=['POST', 'GET'])
 def manga_page(id):
-    session = db_session.create_session()
-    manga = session.query(Manga).filter(Manga.id == id).first()
-    return render_template("manga_page.html", manga=manga, title=manga.name)
+    if request.method == 'GET':
+        session = db_session.create_session()
+        manga = session.query(Manga).filter(Manga.id == id).first()
+        return render_template("manga_page.html", manga=manga, title=manga.name)
+    elif request.method == 'POST':
+        if request.form['input-search']:
+            return redirect(f"/search/{request.form['input-search']}")
+        else:
+            return redirect(f"/manga_page/{id}")
 
 
 @app.route("/chapter_page/<int:manga_id>/<int:chapter_id>/<int:page_number>")
@@ -103,6 +122,25 @@ def chapter_page(manga_id, chapter_id, page_number):
     chapter = session.query(Chapter).filter(Chapter.id == chapter_id).first()
     return render_template("chapter_page.html", manga=manga, chapter=chapter,
                            page_number=page_number, title=chapter.name)
+
+
+@app.route("/search/<text>", methods=['POST', 'GET'])
+def search_page(text):
+    if request.method == 'GET':
+        print(text)
+        session = db_session.create_session()
+        text = text.lower().capitalize()
+        genres = session.query(Genre).filter(Genre.name_of_genre.like(f'%{text}%')).all()
+        mangas = session.query(Manga).filter(Manga.name.like(f'%{text}%')).all()
+        return render_template("search_page.html", mangas=mangas, genres=genres, title="Поиск")
+    elif request.method == 'POST':
+        if request.form['input-search']:
+            return redirect(f"/search/{request.form['input-search']}")
+        else:
+            return redirect(f"/search/<text>")
+
+
+
 
 
 def main():

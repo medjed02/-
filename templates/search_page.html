@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/search_page.css">
+</head>
+<br>
+<div class="overall-results">
+    <div class="overall-results-name">
+        <h2>Результаты поиска:</h2>
+    </div>
+    <div class="overall-results-image">
+        <img width="70px" height="70px" src="/static/img/reveire.jpg" alt="Изображение не найдено">
+    </div>
+</div>
+{% if genres != [] %}
+    <div class="results-of-genre">
+        <div class="results-of-genre-name">
+            <h3><u>Жанры:</u></h3>
+        </div>
+        <br>
+        {% for genre in genres %}
+            <a href="/genre_page/{{genre.id}}">
+                <div class="border border-dark block results-of-genre-results">
+                        <div class="name_block">
+                            <h4>{{genre.name_of_genre}}</h4>
+                        </div>
+                        <div class="rounded-circle image_block">
+                             <img class="rounded-circle" width="100px" height="140px" src="{{genre.cover}}" alt="Изображение не найдено">
+                        </div>
+                        <div class="description_block ">
+                            <p>{{genre.description}}</p>
+                        </div>
+                    </div>
+            </a>
+        <br><br>
+        {% endfor %}
+    </div>
+{% endif %}
+{% if mangas != [] %}
+    <div class="results-of-manga">
+        <div class="results-of-manga-name">
+            <h3><u>Манги:</u></h3>
+        </div>
+        <br>
+        {% for manga in mangas%}
+            <a href="/manga_page/{{manga.id}}">
+                <div class="manga_border border rounded">
+                    <div class="header_block">
+                        <h4>{{manga.name}}</h4>
+                    </div>
+                    <div class="manga_image_block">
+                        <img width="125px" height="175px" src="{{manga.cover}}" alt="Изображение не найдено">
+                    </div>
+                    <div class="manga_descr_block">
+                        {{manga.description}}
+                    </div>
+                </div>
+            </a>
+    </div>
+{% endfor %}
+{% endif %}
+{% if mangas == [] and genres == [] %}
+    <div class="not-found">
+           <h2>Извините, по вашему запросу ничего не найдено</h2>
+    </div>
+{% endif %}
+{% endblock %}

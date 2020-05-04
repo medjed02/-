@@ -1,0 +1,36 @@
+* {box-sizing: border-box;}
+
+.search-block {
+    width: 300px; /* Ширина поля с кнопкой */
+    border: 1px solid #000; /* Параметры рамки */
+    min-height: 20px; /* Минимальная высота */
+}
+#input-search {
+  border: none; /* Убираем рамку */
+    outline: none; /* Убираем свечение в Chrome и Safari */
+    -webkit-appearance: none; /* Убираем рамку в Chrome и Safari */
+    width: 350px; /* Ширина поля */
+    height: 30px;
+    vertical-align: middle; /* Выравнивание по середине */
+}
+
+#input-dop {
+    border: none;
+    outline: none; /* Убираем свечение в Chrome и Safari */
+    -webkit-appearance: none; /* Убираем рамку в Chrome и Safari */
+    position: relative;
+    width: 30px;
+    height: 31px;
+    top: 3px;
+    left: -5px;
+    background: white;
+}
+
+#button-search {
+    position: relative;
+    left: -35px;
+    top: 5px;
+    width: 20px; /* Ширина кнопки */
+    height: 20px; /* Высота кнопки */
+    border: none; /* Убираем рамку */
+}
