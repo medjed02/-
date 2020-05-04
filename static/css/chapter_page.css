@@ -1,0 +1,19 @@
+.normal_image{
+    text-align: center;
+}
+.big_image{
+    text-align: center;
+}
+.button_block{
+    position: fixed;
+    top: 680px;
+    left: 1320px;
+}
+.list_block{
+    position: fixed;
+    top: 680px;
+    left: 80px;
+}
+body{
+    height: 1220px;
+}

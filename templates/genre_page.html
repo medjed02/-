@@ -5,31 +5,30 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="/static/css/genre_page.css">
 </head>
-<div class="col-md6 border rounded">
-    <div class="block4">
+<div class="genre_border border rounded">
+    <div class="header_block">
         <h1>{{genre.name_of_genre}}</h1>
     </div>
-    <div class="block3">
+    <div class="genre_image_block">
         <img width="200px" height="300px" src="{{genre.cover}}" alt="Изображение не найдено">
     </div>
-    <div class="block1">
+    <div class="genre_descr_block">
         {{genre.description}}
     </div>
 </div>
 {% for manga in genre.mangas%}
-<div class="col-md7 border rounded">
-    <div class="block4">
-        <h4>{{manga.name}}</h4>
+<a href="/manga_page/{{manga.id}}">
+    <div class="manga_border border rounded">
+        <div class="header_block">
+            <h4>{{manga.name}}</h4>
+        </div>
+        <div class="manga_image_block">
+            <img width="125px" height="175px" src="{{manga.cover}}" alt="Изображение не найдено">
+        </div>
+        <div class="manga_descr_block">
+            {{manga.description}}
+        </div>
     </div>
-    <div class="block6">
-        <img width="100px" height="140px" src="{{manga.cover}}" alt="Изображение не найдено">
-    </div>
-    <div class="block2">
-        {{manga.description}}
-    </div>
-    <div class="block5">
-        <a href="/manga_page/{{manga.id}}" class="btn btn-warning">Перейти к главам</a>
-    </div>
-</div>
+</a>
 {% endfor %}
 {% endblock %}
