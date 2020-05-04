@@ -5,14 +5,14 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="/static/css/manga_page.css">
 </head>
-<div class="col-md6 border rounded">
-    <div class="block4">
+<div class="manga_border border rounded">
+    <div class="header_block">
         <h1>{{manga.name}}</h1>
     </div>
-    <div class="block3">
+    <div class="manga_image_block">
         <img width="200px" height="280px" src="{{manga.cover}}" alt="Изображение не найдено">
     </div>
-    <div class="block1">
+    <div class="manga_info_block">
         <strong>Автор: </strong>
         {{manga.author}} <br>
         <strong>Художник: </strong>
@@ -29,24 +29,24 @@
         {% endif %}
         {% endfor %}
     </div>
-    <div class="block2">
+    <div class="manga_descr_block">
         <strong>Описание: </strong>
         {{manga.description}}
     </div>
-    <div class="block5">
+    <div class="read_button_block">
         <a href="/chapter_page/{{manga.id}}/{{manga.chapters[0].id}}/1" class="btn btn-warning">Читать с первой главы</a>
     </div>
-    <div class="block6">
+    <div class="cnt_of_likes_block">
         {{manga.cnt_of_likes}}
         <img width="70px" src="/static/img/shaka-like.png" alt="Изображение не найдено">
     </div>
 </div>
-<div class="block4">
+<div class="header_block">
     <h4>Список глав</h4>
 </div>
 {% for chapter in manga.chapters[::-1]%}
-<div class="col-md7 border rounded">
-    <div class="block4">
+<div class="chapter_border border rounded">
+    <div class="header_block">
         <a href="/chapter_page/{{manga.id}}/{{chapter.id}}/1">{{chapter.name}}</a>
     </div>
 </div>
