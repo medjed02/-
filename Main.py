@@ -1,12 +1,24 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from data import db_session
 from data.genres import Genre
+from data.users import User
 from data.mangas import Manga
 from data.chapters import Chapter
+from data.register_form import RegisterForm
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 
 app = Flask(__name__)
+login_manager = LoginManager()
+login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    session = db_session.create_session()
+    return session.query(User).get(user_id)
+
 
 @app.route("/")
 def main_page():
@@ -16,6 +28,23 @@ def main_page():
     for i in range(0, len(dop), 2):
         genres.append([dop[i], dop[i + 1]])
     return render_template("main_page.html", dop=genres, title="Мангеил")
+
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    session = db_session.create_session()
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User(
+            nickname=form.nickname.data,
+            email=form.email.data
+        )
+        user.set_password(form.password.data)
+        session.add(user)
+        session.commit()
+        login_user(user, remember=False)
+        return redirect("/")
+    return render_template('register.html', title='Регистрация', form=form)
 
 
 @app.route("/genre_page/<int:id>")
@@ -43,7 +72,7 @@ def chapter_page(manga_id, chapter_id, page_number):
 
 def main():
     db_session.global_init("db/mangeil.sqlite")
-    app.run()
+    app.run(port=8080, host="127.0.0.1")
 
 
 if __name__ == '__main__':
