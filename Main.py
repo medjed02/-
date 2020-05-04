@@ -5,6 +5,7 @@ from data.users import User
 from data.mangas import Manga
 from data.chapters import Chapter
 from data.register_form import RegisterForm
+from data.login_form import LoginForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 
@@ -35,6 +36,9 @@ def register():
     session = db_session.create_session()
     form = RegisterForm()
     if form.validate_on_submit():
+        if session.query(User).filter(User.nickname == form.nickname.data).first():
+            return render_template('register_page.html', title='Регистрация',
+                                   message="Пользователь с таким именем уже существует", form=form)
         user = User(
             nickname=form.nickname.data,
             email=form.email.data
@@ -44,7 +48,29 @@ def register():
         session.commit()
         login_user(user, remember=False)
         return redirect("/")
-    return render_template('register.html', title='Регистрация', form=form)
+    return render_template('register_page.html', title='Регистрация', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        user = session.query(User).filter(User.nickname == form.nickname.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/")
+        return render_template('login_page.html',
+                               message="Неправильный адрес почты или пароль",
+                               form=form)
+    return render_template('login_page.html', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
 
 
 @app.route("/genre_page/<int:id>")
