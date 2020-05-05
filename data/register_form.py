@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, FileField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField
 from wtforms.validators import DataRequired, EqualTo
+from flask_wtf.file import FileField, FileAllowed
 
 
 class RegisterForm(FlaskForm):
@@ -10,5 +11,6 @@ class RegisterForm(FlaskForm):
     repeat_password = PasswordField('Повторите пароль', validators=[DataRequired(),
                                                                     EqualTo("password",
                                                                             message="Пароли должны совпадать!")])
-    image = FileField('Прикрепите аватарку (необязательно)')
+    image = FileField('Прикрепите аватарку (необязательно)',
+                      validators=[FileAllowed(['jpg', 'png'], 'Прикреплять можно только изображения')], default='')
     submit = SubmitField('Регистрация')

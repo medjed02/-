@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/user_page.css">
+</head>
+<div class="user_border border rounded">
+    <div class="user_info_block">
+        <img height="400px" src="../{{current_user.avatar}}" alt="Изображение не найдено">
+        <h2>{{current_user.nickname}}</h2>
+        <strong>Email: </strong>
+        {{current_user.email}}
+        <br><br>
+        <a href="/edit_user_info/{{current_user.id}}" class="btn btn-warning">Редактировать</a>
+        <a href="/logout" class="btn btn-warning">Выйти из профиля</a>
+    </div>
+</div>
+<h3>Список понравившейся манги</h3>
+{% for manga in user.mangas[::-1]%}
+<a href="/manga_page/{{manga.id}}">
+    <div class="manga_border border rounded">
+        <div class="header_block">
+            <h4>{{manga.name}}</h4>
+        </div>
+        <div class="manga_image_block">
+            <img width="125px" height="175px" src="{{manga.cover}}" alt="Изображение не найдено">
+        </div>
+        <div class="manga_descr_block">
+            {{manga.description}}
+        </div>
+    </div>
+</a>
+{% endfor %}
+{% endblock %}

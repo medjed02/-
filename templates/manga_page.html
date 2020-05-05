@@ -4,6 +4,10 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="/static/css/manga_page.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 </head>
 <div class="manga_border border rounded">
     <div class="header_block">
@@ -38,7 +42,21 @@
     </div>
     <div class="cnt_of_likes_block">
         {{manga.cnt_of_likes}}
-        <img width="70px" src="/static/img/shaka-like.png" alt="Изображение не найдено">
+    </div>
+    <div class="shaka_like">
+        {% if current_user.is_authenticated %}
+        {% if manga in user.mangas %}
+        <a href="/shaka_like_switch/{{manga.id}}">
+            <img width="70px" alt="Изображение не найдено" src="/static/img/shaka-like.png"/></a>
+        {% else %}
+        <a href="/shaka_like_switch/{{manga.id}}">
+            <img width="70px" alt="Изображение не найдено" src="/static/img/shaka-dislike.png"/></a>
+        {% endif %}
+        {% else %}
+        <button type="button" style="outline: none;" data-toggle="modal" data-target="#myModal">
+            <img width="70px" src="/static/img/shaka-dislike.png" alt="Изображение не найдено">
+        </button>
+        {% endif %}
     </div>
 </div>
 <div class="header_block">
@@ -46,8 +64,20 @@
 </div>
 {% for chapter in manga.chapters[::-1]%}
 <div class="chapter_border border rounded">
-    <div class="header_block">
-        <a href="/chapter_page/{{manga.id}}/{{chapter.id}}/1">{{chapter.name}}</a>
+    <a href="/chapter_page/{{manga.id}}/{{chapter.id}}/1">
+        <div class="header_block">
+            {{chapter.name}}
+        </div>
+    </a>
+</div>
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                Чтобы оценить мангу, вам необходимо войти в свой профиль.<br><br>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Ок</button>
+            </div>
+        </div>
     </div>
 </div>
 {% endfor %}
