@@ -219,7 +219,7 @@ def shaka_like_switch(id):
                             
                             
 @app.route("/manga_page/<int:id>", methods=['POST', 'GET'])
-def manga_page(id)                        
+def manga_page(id):
     if request.method == 'GET':
         session = db_session.create_session()
         manga = session.query(Manga).filter(Manga.id == id).first()
@@ -264,9 +264,6 @@ def search_page(text):
             return redirect(f"/search/{request.form['input-search']}")
         else:
             return redirect(f"/search/<text>")
-
-
-
 
 
 def main():
