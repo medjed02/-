@@ -46,3 +46,19 @@
 html, body{
     overflow-x:hidden;
 }
+.shaka_like{
+    position: relative;
+    top: -840px;
+    left: 990px;
+}
+button{
+    outline: none;
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+}
+.modal-body{
+    text-align: center;
+}
