@@ -229,9 +229,14 @@ def manga_page(id):
             user = session.query(User).filter(User.id == current_user.id).first()
             if not user:
                 abort(404)
-            else:
-                user = ''
-        return render_template("manga_page.html", manga=manga, title=manga.name, user=user)
+        else:
+            user = ''
+        if user == '':
+            flag = False
+        else:
+            flag = manga in user.mangas
+        return render_template("manga_page.html", manga=manga, title=manga.name, user=user,
+                               flag=flag)
     elif request.method == 'POST':
         if request.form['input-search']:
             return redirect(f"/search/{request.form['input-search']}")
