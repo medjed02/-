@@ -45,7 +45,7 @@
     </div>
     <div class="shaka_like">
         {% if current_user.is_authenticated %}
-        {% if manga in user.mangas %}
+        {% if flag %}
         <a href="/shaka_like_switch/{{manga.id}}">
             <img width="70px" alt="Изображение не найдено" src="/static/img/shaka-like.png"/></a>
         {% else %}
