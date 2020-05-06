@@ -1,0 +1,92 @@
+{% extends "base_for_register_or_login.html" %}
+
+{% block content %}
+    <center><h1>Добавление манги</h1></center>
+    <form action="" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(class="form-control") }}<br>
+            {% for error in form.name.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p>
+            {{ form.author.label }}<br>
+            {{ form.author(class="form-control") }}<br>
+            {% for error in form.author.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p>
+            {{ form.painter.label }}<br>
+            {{ form.painter(class="form-control") }}<br>
+            {% for error in form.painter.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p>
+            {{ form.translate.label }}<br>
+            {{ form.translate(class="form-control") }}<br>
+            {% for error in form.translate.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        </p>
+        <p>
+            {{ form.date_of_release.label }}<br>
+            {{ form.date_of_release(class="form-control") }}<br>
+            {% for error in form.date_of_release.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p>
+            {{ form.translators.label }}<br>
+            {{ form.translators(class="form-control") }}<br>
+            {% for error in form.translators.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p>
+            {{ form.description.label }}<br>
+            {{ form.description(class="form-control") }}<br>
+            {% for error in form.description.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p>
+            {{ form.genres.label }}<br>
+            {{ form.genres(class="form-control") }}<br>
+            {% for error in form.genres.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p>
+        {{ form.cover.label }}<br>
+        {{ form.cover(class="form-control") }}<br>
+        {% for error in form.cover.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p><font color="red">{{ message }}</font></p>
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    </form>
+{% endblock %}
