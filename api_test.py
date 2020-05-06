@@ -25,3 +25,15 @@ print(get('http://127.0.0.1:8080/api/genre/100').json())
 
 # Строка вместо id жанра
 print(get('http://127.0.0.1:8080/api/genre/aaa').json())
+
+# Получение всех манг
+print(get('http://127.0.0.1:8080/api/mangas').json())
+
+# Получение одной манги
+print(get('http://127.0.0.1:8080/api/manga/1').json())
+
+# Обращение к несуществующему id манги
+print(get('http://127.0.0.1:8080/api/manga/100').json())
+
+# Строка вместо id манги
+print(get('http://127.0.0.1:8080/api/manga/aaa').json())
