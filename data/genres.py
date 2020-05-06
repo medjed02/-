@@ -1,6 +1,5 @@
 import sqlalchemy
 from .db_session import SqlAlchemyBase
-from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import orm
 
 
@@ -12,7 +11,7 @@ association_table = sqlalchemy.Table('mangas_to_genres', SqlAlchemyBase.metadata
                                      )
 
 
-class Genre(SqlAlchemyBase, SerializerMixin):
+class Genre(SqlAlchemyBase):
     __tablename__ = 'genres'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -23,5 +22,14 @@ class Genre(SqlAlchemyBase, SerializerMixin):
 
     mangas = orm.relation("Manga", secondary="mangas_to_genres", backref="genress")
 
-    def __repr__(self):
+    def __str__(self):
         return "<Genre> {} {}".format(str(self.id), self.name_of_genre)
+
+    def to_dict(self):
+        genre = dict()
+        genre['id'] = self.id
+        genre['name_of_genre'] = self.name_of_genre
+        genre['cover'] = self.cover
+        genre['description'] = self.description
+        genre['mangas'] = [str(item) for item in self.mangas]
+        return genre

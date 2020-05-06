@@ -1,10 +1,9 @@
 import sqlalchemy
 from .db_session import SqlAlchemyBase
-from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import orm
 
 
-class Manga(SqlAlchemyBase, SerializerMixin):
+class Manga(SqlAlchemyBase):
     __tablename__ = 'mangas'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -23,5 +22,21 @@ class Manga(SqlAlchemyBase, SerializerMixin):
 
     genres = orm.relation("Genre", secondary="mangas_to_genres", backref="mangass")
 
-    def __repr__(self):
+    def __str__(self):
         return "<Manga> {} {}".format(str(self.id), self.name)
+
+    def to_dict(self):
+        manga = dict()
+        manga['id'] = self.id
+        manga['name'] = self.id
+        manga['author'] = self.id
+        manga['painter'] = self.id
+        manga['translate'] = self.id
+        manga['cnt_of_likes'] = self.id
+        manga['date_of_release'] = self.id
+        manga['translators'] = self.id
+        manga['description'] = self.id
+        manga['cover'] = self.id
+        manga['genres'] = [str(item) for item in self.genres]
+        manga['chapters'] = [item.to_dict() for item in self.chapters]
+        return manga
