@@ -1,5 +1,7 @@
 .user_info_block{
+    position: relative;
     text-align: center;
+    top: 15px;
 }
 .manga_descr_block{
     position: relative;
@@ -20,12 +22,15 @@
 }
 .user_border{
     position: relative;
+    top: 15px;
     left: 250px;
-    height: 550px;
+    height: 565px;
     width: 600px;
     min-width: 600px;
 }
 .manga_border{
+    position: relative;
+    top: 15px;
     height: 230px;
     min-width: 1100px;
 }
@@ -34,5 +39,7 @@ color: #000;
 text-decoration: none;
 }
 h3{
+    position: relative;
     text-align: center;
+    top: 15px;
 }
