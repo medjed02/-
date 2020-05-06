@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, abort
+from flask import Flask, render_template, redirect, request, abort, make_response
 from data import db_session
 from data.genres import Genre
 from data.users import User
@@ -9,11 +9,15 @@ from data.login_form import LoginForm
 from data.edit_user_info_form import EditUserInfoForm
 from data.edit_user_password_form import EditUserPasswordForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_restful import reqparse, abort, Api, Resource
+from data import users_resource, genre_resource, mangas_resource
+from flask import jsonify
 import os
 from PIL import Image
 
 
 app = Flask(__name__)
+api = Api(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -271,7 +275,18 @@ def search_page(text):
             return redirect(f"/search/<text>")
 
 
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+
 def main():
+    api.add_resource(users_resource.UsersListResource, '/api/users')
+    api.add_resource(users_resource.UsersResource, '/api/user/<int:user_id>')
+    api.add_resource(genre_resource.GenresListResource, '/api/genres')
+    api.add_resource(genre_resource.GenresResource, '/api/genre/<int:genre_id>')
+    api.add_resource(mangas_resource.MangasListResource, '/api/mangas')
+    api.add_resource(mangas_resource.MangasResource, '/api/manga/<int:manga_id>')
     db_session.global_init("db/mangeil.sqlite")
     app.run(port=8080, host="127.0.0.1")
 
