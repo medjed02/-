@@ -37,6 +37,8 @@ class MangasResource(Resource):
             return jsonify({'Access is denied': 'message'})
         session = db_session.create_session()
         manga = session.query(Manga).get(manga_id)
+        for genre in manga.genres:
+            genre.mangas.remove(manga)
         session.delete(manga)
         session.commit()
         return jsonify({'success': 'OK'})

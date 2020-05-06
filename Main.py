@@ -10,7 +10,7 @@ from data.edit_user_info_form import EditUserInfoForm
 from data.edit_user_password_form import EditUserPasswordForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_restful import reqparse, abort, Api, Resource
-from data import users_resource, genre_resource, mangas_resource
+from data import users_resource, genre_resource, mangas_resource, chapters_resource
 from flask import jsonify
 import os
 from PIL import Image
@@ -287,6 +287,7 @@ def main():
     api.add_resource(genre_resource.GenresResource, '/api/genre/<int:genre_id>')
     api.add_resource(mangas_resource.MangasListResource, '/api/mangas')
     api.add_resource(mangas_resource.MangasResource, '/api/manga/<int:manga_id>')
+    api.add_resource(chapters_resource.ChaptersResource, '/api/chapter/<int:chapter_id>')
     db_session.global_init("db/mangeil.sqlite")
     app.run(port=8080, host="127.0.0.1")
 
