@@ -4,7 +4,7 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import orm
 
 
-class Message(SqlAlchemyBase, SerializerMixin):
+class Message(SqlAlchemyBase, SerializerMixin): # Класс постов
     __tablename__ = 'messages'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -12,6 +12,7 @@ class Message(SqlAlchemyBase, SerializerMixin):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     content = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
     time = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
+    image = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relation('User')
