@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, EqualTo
 from flask_wtf.file import FileField, FileAllowed
 
 
-class RegisterForm(FlaskForm):
+class RegisterForm(FlaskForm):  # Форма регистрации пользователя
     nickname = StringField('Имя пользователя', validators=[DataRequired()])
     email = StringField('E-mail адрес', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])

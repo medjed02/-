@@ -6,6 +6,7 @@ from flask_login import UserMixin
 from sqlalchemy_serializer import SerializerMixin
 
 
+# Дополнительная таблица для отношения "многие ко многим" манг и пользователей
 association_table = sqlalchemy.Table('mangas_to_users', SqlAlchemyBase.metadata,
                                      sqlalchemy.Column('mangas', sqlalchemy.Integer,
                                                        sqlalchemy.ForeignKey('mangas.id')),
@@ -14,7 +15,7 @@ association_table = sqlalchemy.Table('mangas_to_users', SqlAlchemyBase.metadata,
                                      )
 
 
-class User(SqlAlchemyBase, UserMixin, SerializerMixin):
+class User(SqlAlchemyBase, UserMixin, SerializerMixin):  # Класс пользователя
     __tablename__ = 'users'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -29,10 +30,10 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     messages = orm.relation("Message", back_populates='user')
 
-    def set_password(self, password):
+    def set_password(self, password):  # Функция установки пароля (с хэшированием)
         self.hashed_password = generate_password_hash(password)
 
-    def check_password(self, password):
+    def check_password(self, password):  # Функция проверки пароля
         return check_password_hash(self.hashed_password, password)
 
     def __repr__(self):

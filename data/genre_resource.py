@@ -6,22 +6,22 @@ from data import parsers
 import os
 
 
-def abort_if_genre_not_found(genre_id):
+def abort_if_genre_not_found(genre_id):  # Проверка на существование жанра с заданным id
     session = db_session.create_session()
     genre = session.query(Genre).get(genre_id)
     if not genre:
         abort(404, message=f"Genre {genre_id} not found")
 
 
-def abort_if_genre_found(genre_id):
+def abort_if_genre_found(genre_id):  # Проверка на существование жанра с заданным id (обратная)
     session = db_session.create_session()
     genre = session.query(Genre).get(genre_id)
     if genre:
         abort(404, message=f"Genre {genre_id} already exists")
 
 
-class GenresResource(Resource):
-    def get(self, genre_id):
+class GenresResource(Resource):  # Ресурс жанра
+    def get(self, genre_id):  # Обработчик запроса на получение конкретного жанра (с заданным id)
         abort_if_genre_not_found(genre_id)
         session = db_session.create_session()
         genre = session.query(Genre).get(genre_id)
@@ -31,7 +31,7 @@ class GenresResource(Resource):
             }
         )
 
-    def delete(self, genre_id):
+    def delete(self, genre_id):  # Обработчик запроса на удаление конкретного жанра (с заданным id)
         abort_if_genre_not_found(genre_id)
         args = parsers.delete_parser.parse_args()
         if args['apikey'] != "specialkey":
@@ -47,7 +47,7 @@ class GenresResource(Resource):
         session.commit()
         return jsonify({'success': 'OK'})
 
-    def put(self, genre_id):
+    def put(self, genre_id):  # Обработчик запроса на редактирование конкретного жанра (с заданным id)
         abort_if_genre_not_found(genre_id)
         args = parsers.genre_parser.parse_args()
         if args['apikey'] != "specialkey":
@@ -64,8 +64,8 @@ class GenresResource(Resource):
         return jsonify({'success': 'OK'})
 
 
-class GenresListResource(Resource):
-    def get(self):
+class GenresListResource(Resource):  # Ресурс списка жанров
+    def get(self):  # Обработчик запроса на получение всех жанров
         session = db_session.create_session()
         genres = session.query(Genre).all()
         return jsonify(

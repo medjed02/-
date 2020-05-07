@@ -54,7 +54,7 @@ def main_page(): # обработчик главной страницы
 
 
 @app.route('/register', methods=['POST', 'GET'])
-def register():
+def register():  # обработчик страницы регистрации
     session = db_session.create_session()
     form = RegisterForm()
     if form.validate_on_submit():
@@ -95,7 +95,7 @@ def register():
 
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def login():  # обработчик страницы авторизации
     form = LoginForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -178,7 +178,7 @@ def edit_user_info(id):
 
 @app.route('/edit_user_password/<int:id>', methods=['POST', 'GET'])
 @login_required
-def edit_user_password(id):  # Старница редактирования пароля
+def edit_user_password(id):  # Страница редактирования пароля
     form = EditUserPasswordForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -236,7 +236,7 @@ def add_chapter_page(password):  # Старница добавления гла�
 
 
 @app.route('/add_manga_page/<string:password>', methods=['POST', 'GET'])
-def add_manga_page(password):  # Старница добавления манги
+def add_manga_page(password):  # Страница добавления манги
     if password != 'DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin':
         abort(404)
     session = db_session.create_session()
@@ -298,7 +298,7 @@ def add_genre_page(password):  # Страница добаления жанра
 
 
 @app.route("/genre_page/<int:id>", methods=['POST', 'GET'])
-def genre_page(id):  # Страица жанра
+def genre_page(id):  # Страница жанра
     if request.method == "GET":
         session = db_session.create_session()
         genre = session.query(Genre).filter(Genre.id == id).first()

@@ -3,6 +3,7 @@ from .db_session import SqlAlchemyBase
 from sqlalchemy import orm
 
 
+# Дополнительная таблица для отношения "многие ко многим" манг и жанров
 association_table = sqlalchemy.Table('mangas_to_genres', SqlAlchemyBase.metadata,
                                      sqlalchemy.Column('mangass', sqlalchemy.Integer,
                                                        sqlalchemy.ForeignKey('mangas.id')),
@@ -11,7 +12,7 @@ association_table = sqlalchemy.Table('mangas_to_genres', SqlAlchemyBase.metadata
                                      )
 
 
-class Genre(SqlAlchemyBase):
+class Genre(SqlAlchemyBase):  # Класс жанра
     __tablename__ = 'genres'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -25,7 +26,7 @@ class Genre(SqlAlchemyBase):
     def __str__(self):
         return "<Genre> {} {}".format(str(self.id), self.name_of_genre)
 
-    def to_dict(self):
+    def to_dict(self):  # Функция преобразования нашего объекта в словарь (для API)
         genre = dict()
         genre['id'] = self.id
         genre['name_of_genre'] = self.name_of_genre
