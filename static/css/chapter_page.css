@@ -15,5 +15,10 @@
     left: 80px;
 }
 body{
-    height: 1220px;
+    height: 1280px;
+}
+.dropdown-menu.scrollable {
+    height: auto;
+    max-height: 600px;
+    overflow-x: hidden;
 }

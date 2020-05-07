@@ -47,14 +47,14 @@
         {% if current_user.is_authenticated %}
         {% if flag %}
         <a href="/shaka_like_switch/{{manga.id}}">
-            <img width="70px" alt="Изображение не найдено" src="/static/img/shaka-like.png"/></a>
+            <img width="70px" alt="Изображение не найдено" src="/static/img/invariant/shaka-like.png"/></a>
         {% else %}
         <a href="/shaka_like_switch/{{manga.id}}">
-            <img width="70px" alt="Изображение не найдено" src="/static/img/shaka-dislike.png"/></a>
+            <img width="70px" alt="Изображение не найдено" src="/static/img/invariant/shaka-dislike.png"/></a>
         {% endif %}
         {% else %}
         <button type="button" style="outline: none;" data-toggle="modal" data-target="#myModal">
-            <img width="70px" src="/static/img/shaka-dislike.png" alt="Изображение не найдено">
+            <img width="70px" src="/static/img/invariant/shaka-dislike.png" alt="Изображение не найдено">
         </button>
         {% endif %}
     </div>

@@ -10,13 +10,17 @@ from data.register_form import RegisterForm
 from data.login_form import LoginForm
 from data.edit_user_info_form import EditUserInfoForm
 from data.edit_user_password_form import EditUserPasswordForm
+from data.add_chapter_form import AddChapterForm
+from data.add_manga_form import AddMangaForm
+from data.add_genre_form import AddGenreForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_restful import reqparse, abort, Api, Resource
-from data import users_resource, genre_resource, mangas_resource
+from data import users_resource, genre_resource, mangas_resource, chapters_resource
 from flask import jsonify
 import datetime
 import os
 from PIL import Image
+from zipfile import ZipFile
 
 
 app = Flask(__name__)
@@ -39,7 +43,10 @@ def main_page():
         dop = session.query(Genre).all()
         genres = []
         for i in range(0, len(dop), 2):
-            genres.append([dop[i], dop[i + 1]])
+            if i + 1 == len(dop):
+                genres.append([dop[i]])
+            else:
+                genres.append([dop[i], dop[i + 1]])
         return render_template("main_page.html", dop=genres, title="Мангеил")
 
 
@@ -62,9 +69,8 @@ def register():
         session.add(user)
         session.commit()
         if form.image.data != '':
-            print(form.image.data, type(form.image.data))
             image_file = form.image.data
-            image_filename = "static/img/" + str(user.id) + "_avatar" + '.jpg'
+            image_filename = "static/img/avatars/" + str(user.id) + "_avatar" + '.jpg'
             image_file.save(os.path.join(image_filename))
             image_for_cut = Image.open(image_filename)
             width = image_for_cut.size[0]
@@ -77,7 +83,7 @@ def register():
                 cut_image = image_for_cut.crop((0, space, width, height - space))
             cut_image.save(image_filename)
         else:
-            image_filename = "/static/img/Hatsune_Miku.jpg"
+            image_filename = "/static/img/invariant/Hatsune_Miku.jpg"
         user.avatar = image_filename
         session.commit()
         login_user(user, remember=False)
@@ -145,7 +151,7 @@ def edit_user_info(id):
             session.commit()
             if form.image.data != '':
                 image_file = form.image.data
-                image_filename = "static/img/" + str(user.id) + "_avatar" + '.jpg'
+                image_filename = "static/img/avatars/" + str(user.id) + "_avatar" + '.jpg'
                 image_file.save(os.path.join(image_filename))
                 image_for_cut = Image.open(image_filename)
                 width = image_for_cut.size[0]
@@ -185,6 +191,107 @@ def edit_user_password(id):
         else:
             abort(404)
     return render_template('edit_user_password_form.html', title='Редактирование пароля', form=form)
+
+
+@app.route('/add_chapter_page/<string:password>', methods=['POST', 'GET'])
+def add_chapter_page(password):
+    if password != 'DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin':
+        abort(404)
+    session = db_session.create_session()
+    form = AddChapterForm()
+    if form.validate_on_submit():
+        manga = session.query(Manga).filter(Manga.name == form.manga_name.data).first()
+        if not manga:
+            return render_template('add_chpater_page.html', title='Добавление главы',
+                                   message="Манги с таким названием не существует", form=form)
+        if session.query(Chapter).filter(Chapter.number == form.number.data, Chapter.manga_id == manga.id).first():
+            return render_template('add_chpater_page.html', title='Добавление главы',
+                                   message="Глава с таким номером уже существует", form=form)
+        if session.query(Chapter).filter(Chapter.name == form.chapter_name.data, Chapter.manga_id == manga.id).first():
+            return render_template('add_chpater_page.html', title='Добавление главы',
+                                   message="Глава с таким названием уже существует в этой манге", form=form)
+        zip_file = form.zip.data
+        zip_filename = "static/img/archive.zip"
+        zip_file.save(os.path.join(zip_filename))
+        with ZipFile(zip_filename, 'r') as piczip:
+            pic_str = '%'.join(piczip.namelist())
+        chapter = Chapter(
+            name=form.chapter_name.data,
+            content=pic_str,
+            number=form.number.data,
+            manga_id=manga.id
+        )
+        session.add(chapter)
+        manga.chapters.append(chapter)
+        session.commit()
+        os.mkdir('static/img/' + str(manga.id) + '_manga/' + str(chapter.id) + '_chapter')
+        with ZipFile(zip_filename, 'r') as piczip:
+            piczip.extractall('static/img/' + str(manga.id) + '_manga/' + str(chapter.id) + '_chapter')
+        os.remove(zip_filename)
+        return redirect("/")
+    return render_template('add_chpater_page.html', title='Добавление главы', form=form)
+
+
+@app.route('/add_manga_page/<string:password>', methods=['POST', 'GET'])
+def add_manga_page(password):
+    if password != 'DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin':
+        abort(404)
+    session = db_session.create_session()
+    form = AddMangaForm()
+    if form.validate_on_submit():
+        genres = str(form.genres.data).split(', ')
+        for i in genres:
+            if not session.query(Genre).filter(Genre.name_of_genre == i).first():
+                return render_template('add_manga_page.html', title='Добавление манги',
+                                       message="Вы указали несуществующий жанр", form=form)
+        manga = Manga(
+            name=form.name.data,
+            author=form.author.data,
+            painter=form.painter.data,
+            translate=form.translate.data,
+            cnt_of_likes=0,
+            date_of_release=form.date_of_release.data,
+            translators=form.translators.data,
+            description=form.description.data,
+        )
+        session.add(manga)
+        session.commit()
+        os.mkdir('static/img/' + str(manga.id) + '_manga')
+        image_file = form.cover.data
+        image_filename = 'static/img/' + str(manga.id) + '_manga/' + str(manga.id) + '_manga.jpg'
+        image_file.save(os.path.join(image_filename))
+        manga.cover = '/' + image_filename
+        for i in genres:
+            genre = session.query(Genre).filter(Genre.name_of_genre == i).first()
+            manga.genres.append(genre)
+        session.commit()
+        return redirect("/")
+    return render_template('add_manga_page.html', title='Добавление манги', form=form)
+
+
+@app.route('/add_genre_page/<string:password>', methods=['POST', 'GET'])
+def add_genre_page(password):
+    if password != 'DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin':
+        abort(404)
+    session = db_session.create_session()
+    form = AddGenreForm()
+    if form.validate_on_submit():
+        if session.query(Genre).filter(Genre.name_of_genre == form.name_of_genre.data).first():
+            return render_template('add_genre_page.html', title='Добавление жанра',
+                                   message="Такое имя жанра существует", form=form)
+        genre = Genre(
+            name_of_genre=form.name_of_genre.data,
+            description=form.description.data,
+        )
+        session.add(genre)
+        session.commit()
+        image_file = form.cover.data
+        image_filename = 'static/img/genres/' + str(genre.id) + '_genre.jpg'
+        image_file.save(os.path.join(image_filename))
+        genre.cover = '/' + image_filename
+        session.commit()
+        return redirect("/")
+    return render_template('add_genre_page.html', title='Добавление жанра', form=form)
 
 
 @app.route("/genre_page/<int:id>", methods=['POST', 'GET'])
@@ -477,6 +584,7 @@ def main():
     api.add_resource(genre_resource.GenresResource, '/api/genre/<int:genre_id>')
     api.add_resource(mangas_resource.MangasListResource, '/api/mangas')
     api.add_resource(mangas_resource.MangasResource, '/api/manga/<int:manga_id>')
+    api.add_resource(chapters_resource.ChaptersResource, '/api/chapter/<int:chapter_id>')
     db_session.global_init("db/mangeil.sqlite")
     app.run(port=8080, host="127.0.0.1")
 
