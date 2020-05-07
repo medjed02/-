@@ -1,0 +1,159 @@
+html, body {
+    overflow-x: hidden
+}
+
+.heading {
+    text-align: center;
+}
+
+.avatar {
+     position: relative;
+     left: 20px;
+     top: 20px;
+}
+
+.name-of-user {
+     position: relative;
+     left: 70px;
+     top: -30px;
+}
+
+.content {
+    position: relative;
+    left: 20px;
+    top: -40px;
+}
+
+.time {
+    position: relative;
+    top: -40px;
+    left: 70px;
+}
+
+.theme{
+    position: relative;
+    left: 20px;
+    color: grey;
+}
+
+.post {
+    position: relative;
+    border: 5px double blue;
+    background: rgb(161, 223, 247);
+    width: 800px;
+    top: -920px;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.update {
+    position: relative;
+    left: 1000px;
+    width: 200px;
+    height: 50px;
+}
+
+.tools {
+    position: relative;
+    left: 950px;
+    width: 300px;
+    background: rgb(250, 197, 229);
+}
+
+.add-message {
+    position: relative;
+    width: 200px;
+    height:70px;
+    left: 50px;
+}
+
+.tools-heading {
+  position: relative;
+  left: 50px;
+}
+
+.filters {
+    position: relative;
+    left: 80px;
+}
+
+#check {
+    position: relative;
+    left: 20px;
+    transform:scale(1.3);
+    opacity:0.9;
+    cursor:pointer;
+}
+
+#check-text {
+    position: relative;
+    left: 40px;
+    top: -26px;
+}
+
+.new-or-old-heading {
+    position: relative;
+    left: 20px;
+}
+
+.new-or-old {
+    position: relative;
+    left: 20px;
+}
+
+.search-by-heading {
+     position: relative;
+    left: 20px;
+}
+
+.search-by-input {
+    position: relative;
+    width: 250px;
+    left: 20px;
+}
+
+.with {
+    position: relative;
+    left: 20px;
+}
+
+.by {
+       position: relative;
+    left: 20px;
+}
+
+.search-by-data-1 {
+    position: relative;
+    left: 42px;
+    top: -40px;
+}
+
+.search-by-data-2 {
+    position: relative;
+    left: 42px;
+    top: -40px;
+}
+
+.button-search {
+    position: relative;
+    left:100px;
+}
+
+.not-found {
+  position: relative;
+  top: -720px;
+  color: grey;
+}
+
+#change {
+    width:100px;
+}
+
+#delete {
+    width: 100px;
+}
+
+.change-delete {
+    position: relative;
+    left: 280px;
+    top: -15px;
+}

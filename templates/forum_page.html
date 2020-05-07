@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/forum_page.css">
+</head>
+<div class="heading display-1">
+    <h1>Форум</h1>
+</div>
+<br>
+<a href="/forum"><input type="button" class="btn btn-info update" value="Обновить"></a>
+<br>
+<br>
+<form action="/forum" method="POST">
+    <div class="tools border border-dark">
+        <h3 class="tools-heading">Инструменты:</h3>
+        <br>
+        {% if current_user.is_authenticated %}
+            <a href="/forum/add_post"><input type="button" class="btn btn-success add-message" value="Новый пост"></a>
+        {% endif %}
+        <br>
+        <br>
+        <h4 class="filters">Фильтры:</h4>
+        <br>
+        <input type="checkbox" value="Только мои посты" id="check" name="my_posts"><p id="check-text">Только мои посты</p>
+        <h6 class="new-or-old-heading">Отображать</h6>
+        <select class="new-or-old" name="new_or_old">
+            <option>Сначала новые</option>
+            <option>Сначала старые</option>
+        </select>
+        <br>
+        <br>
+        <h6 class="search-by-heading">Поиск по теме</h6>
+        <input type="text" class="search-by-input" name="interested_theme" placeholder="Меня интересует тема...">
+        <br>
+        <br>
+        <h6 class="search-by-heading">Поиск по автору</h6>
+        <input type="text" class="search-by-input" name="interested_author" placeholder="Меня интересует автор...">
+        <br>
+        <br>
+        <h6 class="search-by-heading">Поиск по дате</h6>
+        <p class="with">с</p>
+        <input type="date" class="search-by-data-1" name="date1">
+        <p class="by">по</p>
+        <input type="date" class="search-by-data-2" name="date2">
+        <br>
+        <h6 class="search-by-heading">Поиск по времени</h6>
+        <p class="with">с</p>
+        <input type="time" class="search-by-data-1" name="time1">
+        <p class="by">по</p>
+        <input type="time" class="search-by-data-2" name="time2">
+        <br>
+        <input type="submit" class="btn btn-info button-search" value="Найти!">
+        <br>
+        <br>
+    </div>
+</form>
+{% if messages == [] %}
+    <h2 class="not-found">Кажется, здесь где-то должно быть перекати-поле...</h2>
+{% endif %}
+{% for message in messages %}
+    <div class="post">
+        <div class="avatar">
+            <img class="rounded-circle" width="50px" height="50px" src="{{message.user.avatar}}"
+                 alt="Изображение не найдено">
+        </div>
+        <div class="name-of-user">
+            <h5>{{message.user.nickname}}</h5>
+        </div>
+        <div class="time">
+            <p>{{message.time}}</p>
+        </div>
+        <div class="content">
+            <p>{{message.content}}</p>
+        </div>
+        <div class="theme">
+            <p>Тема: {{message.name}}</p>
+        </div>
+        {% if current_user.id == message.user.id %}
+            <div class="change-delete">
+                <a href="/forum/change_post/{{message.id}}"><input id="change" type="button"
+                                                    value="Изменить" class="change-delete btn btn-warning"></a>
+                <a href="/forum/delete_post/{{message.id}}"><input id="delete" type="button" value="Удалить" class="change-delete btn btn-danger"></a>
+            </div>
+        {% endif %}
+    </div>
+    <br>
+{% endfor %}
+{% endblock %}
