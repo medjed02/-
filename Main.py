@@ -44,8 +44,11 @@ def main_page():
         genres = []
         for i in range(0, len(dop), 2):
             if i + 1 == len(dop):
+                dop[i].description = dop[i].description[:130] + '...'
                 genres.append([dop[i]])
             else:
+                dop[i].description = dop[i].description[:130] + '...'
+                dop[i + 1].description = dop[i + 1].description[:130] + '...'
                 genres.append([dop[i], dop[i + 1]])
         return render_template("main_page.html", dop=genres, title="Мангеил")
 
