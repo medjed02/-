@@ -591,7 +591,8 @@ def main():  # Добавление ресурсов для апи, инициа
     api.add_resource(messages_resource.MessagesListResource, '/api/messages')
     api.add_resource(messages_resource.MessagesResource, '/api/message/<int:manga_id>')
     db_session.global_init("db/mangeil.sqlite")
-    app.run(port=8080, host="127.0.0.1")
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 
 if __name__ == '__main__':
