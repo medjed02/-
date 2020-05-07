@@ -86,7 +86,7 @@ def register():  # обработчик страницы регистрации
                 cut_image = image_for_cut.crop((0, space, width, height - space))
             cut_image.save(image_filename)
         else:
-            image_filename = "/static/img/invariant/Hatsune_Miku.jpg"
+            image_filename = "static/img/invariant/Hatsune_Miku.jpg"
         user.avatar = image_filename
         session.commit()
         login_user(user, remember=False)
