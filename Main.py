@@ -231,7 +231,7 @@ def add_chapter_page(password):  # Старница добавления гла�
         with ZipFile(zip_filename, 'r') as piczip:
             piczip.extractall('static/img/' + str(manga.id) + '_manga/' + str(chapter.id) + '_chapter')
         os.remove(zip_filename)
-        return redirect("/")
+        return redirect("/add_chapter_page/DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin")
     return render_template('add_chpater_page.html', title='Добавление главы', form=form)
 
 
@@ -268,7 +268,7 @@ def add_manga_page(password):  # Старница добавления манг�
             genre = session.query(Genre).filter(Genre.name_of_genre == i).first()
             manga.genres.append(genre)
         session.commit()
-        return redirect("/")
+        return redirect("/add_manga_page/DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin")
     return render_template('add_manga_page.html', title='Добавление манги', form=form)
 
 
@@ -293,7 +293,7 @@ def add_genre_page(password):  # Страница добаления жанра
         image_file.save(os.path.join(image_filename))
         genre.cover = '/' + image_filename
         session.commit()
-        return redirect("/")
+        return redirect("/add_genre_page/DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin")
     return render_template('add_genre_page.html', title='Добавление жанра', form=form)
 
 
