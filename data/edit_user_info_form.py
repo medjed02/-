@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 from flask_wtf.file import FileField, FileAllowed
 
 
-class EditUserInfoForm(FlaskForm):
+class EditUserInfoForm(FlaskForm):  # Форма редактривания информаци пользователя
     nickname = StringField('Имя пользователя', validators=[DataRequired()])
     email = StringField('E-mail адрес', validators=[DataRequired()])
     image = FileField('Прикрепите аватарку (необязательно)',

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block content %}  <!--Страница пользователя с его личной информацией-->
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="/static/css/user_page.css">
 </head>
-<div class="user_border border rounded">
+<div class="user_border border-primary rounded">
     <div class="user_info_block">
         <img height="400px" src="../{{current_user.avatar}}" alt="Изображение не найдено">
         <h2>{{current_user.nickname}}</h2>
@@ -17,7 +17,7 @@
     </div>
 </div>
 <h3>Список понравившейся манги</h3>
-{% for manga in user.mangas[::-1]%}
+{% for manga in user.mangas[::-1]%}  <!--Вывод списка понравившейся манги-->
 <a href="/manga_page/{{manga.id}}">
     <div class="manga_border border rounded">
         <div class="header_block">

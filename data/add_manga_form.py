@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 
-class AddMangaForm(FlaskForm):
+class AddMangaForm(FlaskForm):  # Форма добавления манги
     name = StringField('Название манги', validators=[DataRequired()])
     author = StringField('Автор', validators=[DataRequired()])
     painter = StringField('Художник', validators=[DataRequired()])

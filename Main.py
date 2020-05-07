@@ -20,14 +20,14 @@ from flask import jsonify
 import datetime
 import os
 from PIL import Image
-from zipfile import ZipFile
+from zipfile import ZipFile  # Импортирование библиотек, объектов и пр.
 
 
 app = Flask(__name__)
 api = Api(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'  # Инициализация основных объектов
 
 
 @login_manager.user_loader
@@ -117,7 +117,7 @@ def logout():
     return redirect("/")
 
 
-@app.route("/user_page/<int:id>")
+@app.route("/user_page/<int:id>")  # Страница пользователя с его личной информацией
 @login_required
 def user_page(id):
     session = db_session.create_session()
@@ -127,11 +127,11 @@ def user_page(id):
     return render_template("user_page.html", user=user, title=current_user.nickname)
 
 
-@app.route('/edit_user_info/<int:id>', methods=['POST', 'GET'])
+@app.route('/edit_user_info/<int:id>', methods=['POST', 'GET'])  # Страница редактирования информации пользователя
 @login_required
 def edit_user_info(id):
     form = EditUserInfoForm()
-    if request.method == "GET":
+    if request.method == "GET":  # Информация пользователся выводится для редактирования
         session = db_session.create_session()
         user = session.query(User).filter(User.id == current_user.id).first()
         if user:
@@ -139,7 +139,7 @@ def edit_user_info(id):
             form.email.data = user.email
         else:
             abort(404)
-    if form.validate_on_submit():
+    if form.validate_on_submit():  # Проверка информации
         session = db_session.create_session()
         if session.query(User).filter(User.nickname == form.nickname.data, User.id != current_user.id).first():
             return render_template('edit_user_info_page.html', title='Редактирование профиля',
@@ -148,11 +148,11 @@ def edit_user_info(id):
             return render_template('edit_user_info_page.html', title='Редактирование профиля',
                                    message="Пользователь с таким e-mail уже существует", form=form)
         user = session.query(User).filter(User.id == current_user.id).first()
-        if user:
+        if user:  # Запись информации
             user.nickname = form.nickname.data
             user.email = form.email.data
             session.commit()
-            if form.image.data != '':
+            if form.image.data != '':  # Обработка аватарки
                 image_file = form.image.data
                 image_filename = "static/img/avatars/" + str(user.id) + "_avatar" + '.jpg'
                 image_file.save(os.path.join(image_filename))
@@ -178,14 +178,14 @@ def edit_user_info(id):
 
 @app.route('/edit_user_password/<int:id>', methods=['POST', 'GET'])
 @login_required
-def edit_user_password(id):
+def edit_user_password(id):  # Старница редактирования пароля
     form = EditUserPasswordForm()
     if form.validate_on_submit():
         session = db_session.create_session()
         user = session.query(User).filter(User.id == current_user.id).first()
-        if user:
+        if user:  # Проверка пользователя и пароля
             if user.check_password(form.password.data):
-                user.set_password(form.new_password.data)
+                user.set_password(form.new_password.data)  # Запись пароля
                 session.add(user)
                 session.commit()
                 return redirect('/edit_user_info/' + str(user.id))
@@ -197,12 +197,12 @@ def edit_user_password(id):
 
 
 @app.route('/add_chapter_page/<string:password>', methods=['POST', 'GET'])
-def add_chapter_page(password):
+def add_chapter_page(password):  # Старница добавления главы
     if password != 'DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin':
         abort(404)
     session = db_session.create_session()
     form = AddChapterForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit():  # Проверка информации
         manga = session.query(Manga).filter(Manga.name == form.manga_name.data).first()
         if not manga:
             return render_template('add_chpater_page.html', title='Добавление главы',
@@ -218,16 +218,16 @@ def add_chapter_page(password):
         zip_file.save(os.path.join(zip_filename))
         with ZipFile(zip_filename, 'r') as piczip:
             pic_str = '%'.join(piczip.namelist())
-        chapter = Chapter(
+        chapter = Chapter(  # Создание новой главы
             name=form.chapter_name.data,
             content=pic_str,
             number=form.number.data,
             manga_id=manga.id
         )
         session.add(chapter)
-        manga.chapters.append(chapter)
+        manga.chapters.append(chapter)  # Добавление главы к манге
         session.commit()
-        os.mkdir('static/img/' + str(manga.id) + '_manga/' + str(chapter.id) + '_chapter')
+        os.mkdir('static/img/' + str(manga.id) + '_manga/' + str(chapter.id) + '_chapter')  # Работа с архивом
         with ZipFile(zip_filename, 'r') as piczip:
             piczip.extractall('static/img/' + str(manga.id) + '_manga/' + str(chapter.id) + '_chapter')
         os.remove(zip_filename)
@@ -236,18 +236,18 @@ def add_chapter_page(password):
 
 
 @app.route('/add_manga_page/<string:password>', methods=['POST', 'GET'])
-def add_manga_page(password):
+def add_manga_page(password):  # Старница добавления манги
     if password != 'DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin':
         abort(404)
     session = db_session.create_session()
     form = AddMangaForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit():  # Проверка информации
         genres = str(form.genres.data).split(', ')
         for i in genres:
             if not session.query(Genre).filter(Genre.name_of_genre == i).first():
                 return render_template('add_manga_page.html', title='Добавление манги',
                                        message="Вы указали несуществующий жанр", form=form)
-        manga = Manga(
+        manga = Manga(  # Создание новой манги
             name=form.name.data,
             author=form.author.data,
             painter=form.painter.data,
@@ -259,12 +259,12 @@ def add_manga_page(password):
         )
         session.add(manga)
         session.commit()
-        os.mkdir('static/img/' + str(manga.id) + '_manga')
+        os.mkdir('static/img/' + str(manga.id) + '_manga')  # Создание папки манги и работа с обложкой
         image_file = form.cover.data
         image_filename = 'static/img/' + str(manga.id) + '_manga/' + str(manga.id) + '_manga.jpg'
         image_file.save(os.path.join(image_filename))
         manga.cover = '/' + image_filename
-        for i in genres:
+        for i in genres:  # Добавление жанров к манге
             genre = session.query(Genre).filter(Genre.name_of_genre == i).first()
             manga.genres.append(genre)
         session.commit()
@@ -273,22 +273,22 @@ def add_manga_page(password):
 
 
 @app.route('/add_genre_page/<string:password>', methods=['POST', 'GET'])
-def add_genre_page(password):
+def add_genre_page(password):  # Страница добаления жанра
     if password != 'DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin':
         abort(404)
     session = db_session.create_session()
     form = AddGenreForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit():  # Проверка информации
         if session.query(Genre).filter(Genre.name_of_genre == form.name_of_genre.data).first():
             return render_template('add_genre_page.html', title='Добавление жанра',
                                    message="Такое имя жанра существует", form=form)
-        genre = Genre(
+        genre = Genre(  # Создание новго жанра
             name_of_genre=form.name_of_genre.data,
             description=form.description.data,
         )
         session.add(genre)
         session.commit()
-        image_file = form.cover.data
+        image_file = form.cover.data  # Работа с иллюстрацией жанра
         image_filename = 'static/img/genres/' + str(genre.id) + '_genre.jpg'
         image_file.save(os.path.join(image_filename))
         genre.cover = '/' + image_filename
@@ -298,7 +298,7 @@ def add_genre_page(password):
 
 
 @app.route("/genre_page/<int:id>", methods=['POST', 'GET'])
-def genre_page(id):
+def genre_page(id):  # Страица жанра
     if request.method == "GET":
         session = db_session.create_session()
         genre = session.query(Genre).filter(Genre.id == id).first()
@@ -309,7 +309,7 @@ def genre_page(id):
 
 @app.route('/shaka_like_switch/<int:id>')
 @login_required
-def shaka_like_switch(id):
+def shaka_like_switch(id):  # Установка и убирание лайка
     session = db_session.create_session()
     manga = session.query(Manga).filter(Manga.id == id).first()
     user = session.query(User).filter(User.id == current_user.id).first()
@@ -326,7 +326,7 @@ def shaka_like_switch(id):
                             
                             
 @app.route("/manga_page/<int:id>", methods=['POST', 'GET'])
-def manga_page(id):
+def manga_page(id):  # Страница манги
     if request.method == 'GET':
         session = db_session.create_session()
         manga = session.query(Manga).filter(Manga.id == id).first()
@@ -347,7 +347,7 @@ def manga_page(id):
 
 
 @app.route("/chapter_page/<int:manga_id>/<int:chapter_id>/<int:page_number>")
-def chapter_page(manga_id, chapter_id, page_number):
+def chapter_page(manga_id, chapter_id, page_number):  # Страница главы
     session = db_session.create_session()
     manga = session.query(Manga).filter(Manga.id == manga_id).first()
     chapter = session.query(Chapter).filter(Chapter.id == chapter_id).first()
@@ -580,7 +580,7 @@ def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
-def main():
+def main():  # Добавление ресурсов для апи, инициализация базы данных и приложения
     api.add_resource(users_resource.UsersListResource, '/api/users')
     api.add_resource(users_resource.UsersResource, '/api/user/<int:user_id>')
     api.add_resource(genre_resource.GenresListResource, '/api/genres')

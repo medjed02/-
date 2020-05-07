@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block content %}  <!--Старница жанра-->
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="/static/css/genre_page.css">
@@ -16,7 +16,7 @@
         {{genre.description}}
     </div>
 </div>
-{% for manga in genre.mangas%}
+{% for manga in genre.mangas%}  <!--Вывод списка манг данного жанра-->
 <a href="/manga_page/{{manga.id}}">
     <div class="manga_border border rounded">
         <div class="header_block">

@@ -30,10 +30,12 @@
 .genre_border{
     height: 400px;
     min-width: 1100px;
+    background: rgb(245, 174, 235);
 }
 .manga_border{
     height: 230px;
     min-width: 1100px;
+    background: rgb(247, 158, 62);
 }
 a:link, a:visited, a:hover, a:active{
 color: #000;

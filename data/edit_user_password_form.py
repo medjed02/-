@@ -3,7 +3,7 @@ from wtforms import PasswordField, SubmitField
 from wtforms.validators import DataRequired, EqualTo
 
 
-class EditUserPasswordForm(FlaskForm):
+class EditUserPasswordForm(FlaskForm):  # Форма для редактирования пароля пользователя
     password = PasswordField('Старый пароль', validators=[DataRequired()])
     new_password = PasswordField('Новый пароль', validators=[DataRequired()])
     repeat_new_password = PasswordField('Повторите новый пароль',
