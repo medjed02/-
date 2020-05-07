@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block content %}  <!--Страница манги-->
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="/static/css/manga_page.css">
@@ -28,7 +28,7 @@
         <strong>Переводчики: </strong>
         {{manga.translators}} <br>
         <strong>Жанры: </strong>
-        {% for genre in manga.genres%}
+        {% for genre in manga.genres%}  <!--Вывод жанров манги с ссылками-->
         <a href="/genre_page/{{genre.id}}">{{genre.name_of_genre}}</a>{% if manga.genres[-1] != genre %},
         {% endif %}
         {% endfor %}
@@ -44,7 +44,7 @@
         {{manga.cnt_of_likes}}
     </div>
     <div class="shaka_like">
-        {% if current_user.is_authenticated %}
+        {% if current_user.is_authenticated %}  <!--Проверка условий для определения состояния лайка-->
         {% if flag %}
         <a href="/shaka_like_switch/{{manga.id}}">
             <img width="70px" alt="Изображение не найдено" src="/static/img/invariant/shaka-like.png"/></a>
@@ -62,7 +62,7 @@
 <div class="header_block">
     <h4>Список глав</h4>
 </div>
-{% for chapter in manga.chapters[::-1]%}
+{% for chapter in manga.chapters[::-1]%}  <!--Вывод списка глав манги-->
 <div class="chapter_border border rounded">
     <a href="/chapter_page/{{manga.id}}/{{chapter.id}}/1">
         <div class="header_block">

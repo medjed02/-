@@ -16,6 +16,7 @@
 }
 body{
     height: 1280px;
+    background: rgb(244, 246, 244);
 }
 .dropdown-menu.scrollable {
     height: auto;

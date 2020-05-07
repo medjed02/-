@@ -27,12 +27,16 @@
     height: 565px;
     width: 600px;
     min-width: 600px;
+    background: rgb(161, 223, 247);
+    border: 5px double blue;
+    border-radius: 10px 10px 10px 10px;
 }
 .manga_border{
     position: relative;
     top: 15px;
     height: 230px;
     min-width: 1100px;
+    background: rgb(247, 158, 62);
 }
 a:link, a:visited, a:hover, a:active{
 color: #000;

@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 
-class AddGenreForm(FlaskForm):
+class AddGenreForm(FlaskForm):  # Форма добавления жанра
     name_of_genre = StringField('Название жанра', validators=[DataRequired()])
     description = StringField('Описание', validators=[DataRequired()])
     cover = FileField('Обложка',
