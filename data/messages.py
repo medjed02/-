@@ -11,6 +11,7 @@ class Message(SqlAlchemyBase, SerializerMixin):
                            primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     content = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
+    time = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relation('User')
