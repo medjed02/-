@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="/static/css/genre_page.css">
 </head>
+<br>
 <div class="genre_border border rounded">
     <div class="header_block">
         <h1>{{genre.name_of_genre}}</h1>
@@ -16,6 +17,7 @@
         {{genre.description}}
     </div>
 </div>
+<br>
 {% for manga in genre.mangas%}  <!--Вывод списка манг данного жанра-->
 <a href="/manga_page/{{manga.id}}">
     <div class="manga_border border rounded">
@@ -30,5 +32,6 @@
         </div>
     </div>
 </a>
+<br>
 {% endfor %}
 {% endblock %}
