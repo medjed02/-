@@ -50,7 +50,7 @@ def main_page(): # обработчик главной страницы
                 dop[i].description = dop[i].description[:130] + '...'
                 dop[i + 1].description = dop[i + 1].description[:130] + '...'
                 genres.append([dop[i], dop[i + 1]])
-        return render_template("main_page.html", dop=genres, title="Мангеил")
+        return render_template("main_page.html", dop=genres, title="Мангаил")
 
 
 @app.route('/register', methods=['POST', 'GET'])
