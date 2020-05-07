@@ -15,7 +15,7 @@ from data.add_manga_form import AddMangaForm
 from data.add_genre_form import AddGenreForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_restful import reqparse, abort, Api, Resource
-from data import users_resource, genre_resource, mangas_resource, chapters_resource
+from data import users_resource, genre_resource, mangas_resource, chapters_resource, messages_resource
 from flask import jsonify
 import datetime
 import os
@@ -588,6 +588,8 @@ def main():  # Добавление ресурсов для апи, инициа
     api.add_resource(mangas_resource.MangasListResource, '/api/mangas')
     api.add_resource(mangas_resource.MangasResource, '/api/manga/<int:manga_id>')
     api.add_resource(chapters_resource.ChaptersResource, '/api/chapter/<int:chapter_id>')
+    api.add_resource(messages_resource.MessagesListResource, '/api/messages')
+    api.add_resource(messages_resource.MessagesResource, '/api/message/<int:manga_id>')
     db_session.global_init("db/mangeil.sqlite")
     app.run(port=8080, host="127.0.0.1")
 
