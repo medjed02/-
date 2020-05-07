@@ -4,7 +4,7 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import orm
 
 
-class Message(SqlAlchemyBase, SerializerMixin): # Класс постов
+class Message(SqlAlchemyBase, SerializerMixin):  # Класс постов
     __tablename__ = 'messages'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,

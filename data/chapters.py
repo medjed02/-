@@ -3,7 +3,7 @@ from .db_session import SqlAlchemyBase
 from sqlalchemy import orm
 
 
-class Chapter(SqlAlchemyBase):
+class Chapter(SqlAlchemyBase):  # Класс главы манги
     __tablename__ = 'chapters'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -15,7 +15,7 @@ class Chapter(SqlAlchemyBase):
                                  sqlalchemy.ForeignKey("mangas.id"))
     manga = orm.relation('Manga')
 
-    def to_dict(self):
+    def to_dict(self):  # Функция преобразования нашего объекта в словарь (для API)
         chapter = dict()
         chapter['id'] = self.id
         chapter['name'] = self.name

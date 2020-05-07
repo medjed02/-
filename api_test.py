@@ -37,3 +37,15 @@ print(get('http://127.0.0.1:8080/api/manga/100').json())
 
 # Строка вместо id манги
 print(get('http://127.0.0.1:8080/api/manga/aaa').json())
+
+# Получение всех постов
+print(get('http://127.0.0.1:8080/api/messages').json())
+
+# Получение одного поста
+print(get('http://127.0.0.1:8080/api/message/1').json())
+
+# Обращение к несуществующему id поста
+print(get('http://127.0.0.1:8080/api/message/100').json())
+
+# Строка вместо id поста
+print(get('http://127.0.0.1:8080/api/message/aaa').json())

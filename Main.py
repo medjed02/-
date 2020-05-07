@@ -15,7 +15,7 @@ from data.add_manga_form import AddMangaForm
 from data.add_genre_form import AddGenreForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_restful import reqparse, abort, Api, Resource
-from data import users_resource, genre_resource, mangas_resource, chapters_resource
+from data import users_resource, genre_resource, mangas_resource, chapters_resource, messages_resource
 from flask import jsonify
 import datetime
 import os
@@ -54,7 +54,7 @@ def main_page(): # обработчик главной страницы
 
 
 @app.route('/register', methods=['POST', 'GET'])
-def register():
+def register():  # обработчик страницы регистрации
     session = db_session.create_session()
     form = RegisterForm()
     if form.validate_on_submit():
@@ -95,7 +95,7 @@ def register():
 
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def login():  # обработчик страницы авторизации
     form = LoginForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -178,7 +178,7 @@ def edit_user_info(id):
 
 @app.route('/edit_user_password/<int:id>', methods=['POST', 'GET'])
 @login_required
-def edit_user_password(id):  # Старница редактирования пароля
+def edit_user_password(id):  # Страница редактирования пароля
     form = EditUserPasswordForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -236,7 +236,7 @@ def add_chapter_page(password):  # Старница добавления гла�
 
 
 @app.route('/add_manga_page/<string:password>', methods=['POST', 'GET'])
-def add_manga_page(password):  # Старница добавления манги
+def add_manga_page(password):  # Страница добавления манги
     if password != 'DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin':
         abort(404)
     session = db_session.create_session()
@@ -298,7 +298,7 @@ def add_genre_page(password):  # Страница добаления жанра
 
 
 @app.route("/genre_page/<int:id>", methods=['POST', 'GET'])
-def genre_page(id):  # Страица жанра
+def genre_page(id):  # Страница жанра
     if request.method == "GET":
         session = db_session.create_session()
         genre = session.query(Genre).filter(Genre.id == id).first()
@@ -588,6 +588,8 @@ def main():  # Добавление ресурсов для апи, инициа
     api.add_resource(mangas_resource.MangasListResource, '/api/mangas')
     api.add_resource(mangas_resource.MangasResource, '/api/manga/<int:manga_id>')
     api.add_resource(chapters_resource.ChaptersResource, '/api/chapter/<int:chapter_id>')
+    api.add_resource(messages_resource.MessagesListResource, '/api/messages')
+    api.add_resource(messages_resource.MessagesResource, '/api/message/<int:manga_id>')
     db_session.global_init("db/mangeil.sqlite")
     app.run(port=8080, host="127.0.0.1")
 

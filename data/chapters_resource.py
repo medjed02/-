@@ -3,6 +3,8 @@ from data import db_session
 from data.chapters import Chapter
 from flask import jsonify
 from data import parsers
+import os
+import shutil
 
 
 def abort_if_chapter_not_found(chapter_id):
@@ -32,11 +34,14 @@ class ChaptersResource(Resource):
 
     def delete(self, chapter_id):
         abort_if_chapter_not_found(chapter_id)
-        args = parsers.chapter_parser.parse_args()
+        args = parsers.delete_parser.parse_args()
         if args['apikey'] != "specialkey":
             return jsonify({'Access is denied': 'message'})
         session = db_session.create_session()
         chapter = session.query(Chapter).get(chapter_id)
+        path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../static/img/' +
+                            str(chapter.manga_id) + "_manga/" + str(chapter_id) + "_chapter")
+        shutil.rmtree(path)
         chapter.manga.chapters.remove(chapter)
         session.delete(chapter)
         session.commit()

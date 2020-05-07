@@ -3,7 +3,7 @@ from .db_session import SqlAlchemyBase
 from sqlalchemy import orm
 
 
-class Manga(SqlAlchemyBase):
+class Manga(SqlAlchemyBase):  # Класс манги
     __tablename__ = 'mangas'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -25,7 +25,7 @@ class Manga(SqlAlchemyBase):
     def __str__(self):
         return "<Manga> {} {}".format(str(self.id), self.name)
 
-    def to_dict(self):
+    def to_dict(self):  # Функция преобразования нашего объекта в словарь (для API)
         manga = dict()
         manga['id'] = self.id
         manga['name'] = self.id
