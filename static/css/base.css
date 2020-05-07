@@ -20,7 +20,7 @@
     -webkit-appearance: none; /* Убираем рамку в Chrome и Safari */
     position: relative;
     width: 30px;
-    height: 31px;
+    height: 30px;
     top: 3px;
     left: -5px;
     background: white;
@@ -33,4 +33,8 @@
     width: 20px; /* Ширина кнопки */
     height: 20px; /* Высота кнопки */
     border: none; /* Убираем рамку */
+}
+
+#button-forum {
+    border: 0;
 }
