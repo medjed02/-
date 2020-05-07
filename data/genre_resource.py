@@ -3,6 +3,7 @@ from data import db_session
 from data.genres import Genre
 from flask import jsonify
 from data import parsers
+import os
 
 
 def abort_if_genre_not_found(genre_id):
@@ -32,13 +33,16 @@ class GenresResource(Resource):
 
     def delete(self, genre_id):
         abort_if_genre_not_found(genre_id)
-        args = parsers.genre_parser.parse_args()
+        args = parsers.delete_parser.parse_args()
         if args['apikey'] != "specialkey":
             return jsonify({'Access is denied': 'message'})
         session = db_session.create_session()
         genre = session.query(Genre).get(genre_id)
         for manga in genre.mangas:
             manga.genres.remove(genre)
+        path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../static/img/genres/' +
+                            str(genre_id) + "_genre.jpg")
+        os.remove(path)
         session.delete(genre)
         session.commit()
         return jsonify({'success': 'OK'})
