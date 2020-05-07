@@ -37,7 +37,7 @@ def load_user(user_id):
 
 
 @app.route("/", methods=['POST', 'GET'])
-def main_page():
+def main_page(): # обработчик главной страницы
     if request.method == 'GET':
         session = db_session.create_session()
         dop = session.query(Genre).all()
@@ -358,7 +358,7 @@ def chapter_page(manga_id, chapter_id, page_number):  # Страница гла�
 
 
 @app.route("/search/<text>", methods=['POST', 'GET'])
-def search_page(text):
+def search_page(text):      # обработчик страницы поиска
     if request.method == 'GET':
         print(text)
         session = db_session.create_session()
@@ -367,12 +367,12 @@ def search_page(text):
         genres = []
         mangas = []
         for genre in a:
-            dop = genre.name_of_genre.lower()
+            dop = genre.name_of_genre.lower() # поиск результатов
             if dop in text or text in dop:
                 genres.append(genre)
         a = session.query(Manga).all()
         for manga in a:
-            dop = manga.name.lower()
+            dop = manga.name.lower()    # поиск результатов
             if dop in text or text in dop:
                 mangas.append(manga)
         return render_template("search_page.html", mangas=mangas, genres=genres, title="Поиск")
@@ -389,7 +389,7 @@ def handler():
 
 
 @app.route("/forum", methods=['POST', 'GET'])
-def forum():
+def forum():                        # обработчик страницы поиска
     if request.method == 'GET':
         session = db_session.create_session()
         messages = session.query(Message).all()
@@ -397,15 +397,15 @@ def forum():
     if request.method == "POST":
         session = db_session.create_session()
         messages = session.query(Message).all()
-        if "my_posts" in request.form:
+        if "my_posts" in request.form:  # фильтрация по моим/всем постам
             if request.form["my_posts"]:
                 id_dop = current_user.id
                 messages = session.query(Message).filter(Message.user_id == id_dop).all()
-        if request.form["new_or_old"]:
+        if request.form["new_or_old"]:  # фильтрация по новым/старым постам
             sort = request.form["new_or_old"]
             if sort == 'Сначала новые':
                 messages.reverse()
-        if request.form["interested_theme"]:
+        if request.form["interested_theme"]:    # фильтрация по теме
             theme = request.form["interested_theme"]
             a = messages[:]
             messages = []
@@ -414,7 +414,7 @@ def forum():
                 dop = message.name.lower()
                 if theme in dop or dop in theme:
                     messages.append(message)
-        if request.form["interested_author"]:
+        if request.form["interested_author"]: # фильтарция по автору
             author = request.form["interested_author"]
             a = messages[:]
             messages = []
@@ -423,7 +423,7 @@ def forum():
                 dop = message.user.nickname.lower()
                 if author in dop or dop in author:
                     messages.append(message)
-        if request.form["date1"]:
+        if request.form["date1"]:   # фильтрация по дате
             date1 = request.form["date1"]
             a = messages[:]
             messages = []
@@ -447,7 +447,7 @@ def forum():
                             continue
                         else:
                             messages.append(message)
-        if request.form["date2"]:
+        if request.form["date2"]:   # фильтрация по дате
             date2 = request.form["date2"]
             a = messages[:]
             messages = []
@@ -471,7 +471,7 @@ def forum():
                             continue
                         else:
                             messages.append(message)
-        if request.form['time1']:
+        if request.form['time1']:   # фильтрация по времени
             time1 = [int(i) for i in request.form['time1'].split(':')]
             time1 = time1[0] * 60 + time1[1]
             a = messages[:]
@@ -483,7 +483,7 @@ def forum():
                     continue
                 else:
                     messages.append(message)
-        if request.form['time1']:
+        if request.form['time1']:   # фильтрация по времени
             time1 = [int(i) for i in request.form['time1'].split(':')]
             time1 = time1[0] * 60 + time1[1]
             a = messages[:]
@@ -500,7 +500,7 @@ def forum():
 
 
 @app.route("/forum/add_post", methods=['POST', 'GET'])
-def add_post():
+def add_post():     # обработчик страницы добавления поста
     session = db_session.create_session()
     form = MessageForm()
     if form.validate_on_submit():
@@ -510,7 +510,7 @@ def add_post():
         else:
             day = time.day
         if len(str(time.month)) == 1:
-            month = '0' + str(time.month)
+            month = '0' + str(time.month) # извлечение даты
         else:
             month = time.month
         if len(str(time.hour)) == 1:
@@ -523,7 +523,7 @@ def add_post():
             minute = time.minute
         time = '.'.join([str(day), str(month), str(time.year)]) + ' ' + \
                ':'.join([str(hour), str(minute)])
-        message = Message()
+        message = Message()             # извлечение всего остального
         message.name = form.name.data
         message.content = form.content.data
         message.user_id = current_user.id
@@ -537,14 +537,14 @@ def add_post():
 
 
 @app.route("/forum/change_post/<int:id>", methods=['POST', 'GET'])
-def change_post(id):
+def change_post(id):    # обработчик страницы изменения поста
     form = MessageForm()
     if request.method == "GET":
         session = db_session.create_session()
         message = session.query(Message).filter(Message.id == id,
                                                 Message.user == current_user).first()
         if message:
-            form.name.data = message.name
+            form.name.data = message.name   # занесение данных в форму
             form.content.data = message.content
         else:
             abort(404)
@@ -563,7 +563,7 @@ def change_post(id):
 
 
 @app.route("/forum/delete_post/<int:id>", methods=['POST', 'GET'])
-def delete_post(id):
+def delete_post(id):    # обработчик удаления поста
     session = db_session.create_session()
     message = session.query(Message).filter(Message.id == id,
                                             Message.user == current_user).first()
