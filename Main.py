@@ -73,7 +73,8 @@ def register():
         session.commit()
         if form.image.data != '':
             image_file = form.image.data
-            image_filename = "static/img/avatars/" + str(user.id) + "_avatar" + '.jpg'
+            image_extension = image_file.filename[image_file.filename.rfind('.') + 1:]
+            image_filename = "static/img/avatars/" + str(user.id) + "_avatar." + image_extension
             image_file.save(os.path.join(image_filename))
             image_for_cut = Image.open(image_filename)
             width = image_for_cut.size[0]
@@ -154,7 +155,8 @@ def edit_user_info(id):
             session.commit()
             if form.image.data != '':  # Обработка аватарки
                 image_file = form.image.data
-                image_filename = "static/img/avatars/" + str(user.id) + "_avatar" + '.jpg'
+                image_extension = image_file.filename[image_file.filename.rfind('.') + 1:]
+                image_filename = "static/img/avatars/" + str(user.id) + "_avatar." + image_extension
                 image_file.save(os.path.join(image_filename))
                 image_for_cut = Image.open(image_filename)
                 width = image_for_cut.size[0]
@@ -261,7 +263,8 @@ def add_manga_page(password):  # Старница добавления манг�
         session.commit()
         os.mkdir('static/img/' + str(manga.id) + '_manga')  # Создание папки манги и работа с обложкой
         image_file = form.cover.data
-        image_filename = 'static/img/' + str(manga.id) + '_manga/' + str(manga.id) + '_manga.jpg'
+        image_extension = image_file.filename[image_file.filename.rfind('.') + 1:]
+        image_filename = 'static/img/' + str(manga.id) + '_manga/' + str(manga.id) + '_manga.' + image_extension
         image_file.save(os.path.join(image_filename))
         manga.cover = '/' + image_filename
         for i in genres:  # Добавление жанров к манге
@@ -289,7 +292,8 @@ def add_genre_page(password):  # Страница добаления жанра
         session.add(genre)
         session.commit()
         image_file = form.cover.data  # Работа с иллюстрацией жанра
-        image_filename = 'static/img/genres/' + str(genre.id) + '_genre.jpg'
+        image_extension = image_file.filename[image_file.filename.rfind('.') + 1:]
+        image_filename = 'static/img/genres/' + str(genre.id) + '_genre.' + image_extension
         image_file.save(os.path.join(image_filename))
         genre.cover = '/' + image_filename
         session.commit()
@@ -298,7 +302,7 @@ def add_genre_page(password):  # Страница добаления жанра
 
 
 @app.route("/genre_page/<int:id>", methods=['POST', 'GET'])
-def genre_page(id):  # Страица жанра
+def genre_page(id):  # Страница жанра
     if request.method == "GET":
         session = db_session.create_session()
         genre = session.query(Genre).filter(Genre.id == id).first()
