@@ -26,7 +26,7 @@
             {% if current_user.is_authenticated %}
                 <p>
                    <a class="btn btn-warning navbar-brand" href="/user_page/{{current_user.id}}">{{current_user.nickname}}
-                       <img width="60px" height="60px;" src="/{{current_user.avatar}}" class="rounded-circle" alt="Oops"></a>
+                       <img width="60px" height="60px" src="/{{current_user.avatar}}" class="rounded-circle" alt="Oops"></a>
             </p>
             {% else %}
                 <p>

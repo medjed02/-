@@ -15,13 +15,12 @@ from data.add_manga_form import AddMangaForm
 from data.add_genre_form import AddGenreForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_restful import reqparse, abort, Api, Resource
-from data import users_resource, genre_resource, mangas_resource, chapters_resource, messages_resource
+from data import users_resource, genre_resource, mangas_resource, chapters_resource
 from flask import jsonify
 import datetime
 import os
 from PIL import Image
 from zipfile import ZipFile  # Импортирование библиотек, объектов и пр.
-
 
 app = Flask(__name__)
 api = Api(app)
@@ -37,7 +36,7 @@ def load_user(user_id):
 
 
 @app.route("/", methods=['POST', 'GET'])
-def main_page(): # обработчик главной страницы
+def main_page():  # обработчик главной страницы
     if request.method == 'GET':
         session = db_session.create_session()
         dop = session.query(Genre).all()
@@ -54,7 +53,7 @@ def main_page(): # обработчик главной страницы
 
 
 @app.route('/register', methods=['POST', 'GET'])
-def register():  # обработчик страницы регистрации
+def register():
     session = db_session.create_session()
     form = RegisterForm()
     if form.validate_on_submit():
@@ -73,7 +72,8 @@ def register():  # обработчик страницы регистрации
         session.commit()
         if form.image.data != '':
             image_file = form.image.data
-            image_filename = "static/img/avatars/" + str(user.id) + "_avatar" + '.jpg'
+            image_extension = image_file.filename[image_file.filename.rfind('.') + 1:]
+            image_filename = "static/img/avatars/" + str(user.id) + "_avatar." + image_extension
             image_file.save(os.path.join(image_filename))
             image_for_cut = Image.open(image_filename)
             width = image_for_cut.size[0]
@@ -86,7 +86,7 @@ def register():  # обработчик страницы регистрации
                 cut_image = image_for_cut.crop((0, space, width, height - space))
             cut_image.save(image_filename)
         else:
-            image_filename = "static/img/invariant/Hatsune_Miku.jpg"
+            image_filename = "/static/img/invariant/Hatsune_Miku.jpg"
         user.avatar = image_filename
         session.commit()
         login_user(user, remember=False)
@@ -95,7 +95,7 @@ def register():  # обработчик страницы регистрации
 
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():  # обработчик страницы авторизации
+def login():
     form = LoginForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -154,7 +154,8 @@ def edit_user_info(id):
             session.commit()
             if form.image.data != '':  # Обработка аватарки
                 image_file = form.image.data
-                image_filename = "static/img/avatars/" + str(user.id) + "_avatar" + '.jpg'
+                image_extension = image_file.filename[image_file.filename.rfind('.') + 1:]
+                image_filename = "static/img/avatars/" + str(user.id) + "_avatar." + image_extension
                 image_file.save(os.path.join(image_filename))
                 image_for_cut = Image.open(image_filename)
                 width = image_for_cut.size[0]
@@ -178,7 +179,7 @@ def edit_user_info(id):
 
 @app.route('/edit_user_password/<int:id>', methods=['POST', 'GET'])
 @login_required
-def edit_user_password(id):  # Страница редактирования пароля
+def edit_user_password(id):  # Старница редактирования пароля
     form = EditUserPasswordForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -236,7 +237,7 @@ def add_chapter_page(password):  # Старница добавления гла�
 
 
 @app.route('/add_manga_page/<string:password>', methods=['POST', 'GET'])
-def add_manga_page(password):  # Страница добавления манги
+def add_manga_page(password):  # Старница добавления манги
     if password != 'DUK_Petyan_Kalinin_Mihail_Uryevich_Zamyatnin':
         abort(404)
     session = db_session.create_session()
@@ -261,7 +262,8 @@ def add_manga_page(password):  # Страница добавления манг�
         session.commit()
         os.mkdir('static/img/' + str(manga.id) + '_manga')  # Создание папки манги и работа с обложкой
         image_file = form.cover.data
-        image_filename = 'static/img/' + str(manga.id) + '_manga/' + str(manga.id) + '_manga.jpg'
+        image_extension = image_file.filename[image_file.filename.rfind('.') + 1:]
+        image_filename = 'static/img/' + str(manga.id) + '_manga/' + str(manga.id) + '_manga.' + image_extension
         image_file.save(os.path.join(image_filename))
         manga.cover = '/' + image_filename
         for i in genres:  # Добавление жанров к манге
@@ -289,7 +291,8 @@ def add_genre_page(password):  # Страница добаления жанра
         session.add(genre)
         session.commit()
         image_file = form.cover.data  # Работа с иллюстрацией жанра
-        image_filename = 'static/img/genres/' + str(genre.id) + '_genre.jpg'
+        image_extension = image_file.filename[image_file.filename.rfind('.') + 1:]
+        image_filename = 'static/img/genres/' + str(genre.id) + '_genre.' + image_extension
         image_file.save(os.path.join(image_filename))
         genre.cover = '/' + image_filename
         session.commit()
@@ -303,7 +306,7 @@ def genre_page(id):  # Страница жанра
         session = db_session.create_session()
         genre = session.query(Genre).filter(Genre.id == id).first()
         if not genre:
-            abort(404)                    
+            abort(404)
         return render_template("genre_page.html", genre=genre, title=genre.name_of_genre)
 
 
@@ -323,8 +326,8 @@ def shaka_like_switch(id):  # Установка и убирание лайка
         manga.cnt_of_likes += 1
     session.commit()
     return redirect('/manga_page/' + str(id))
-                            
-                            
+
+
 @app.route("/manga_page/<int:id>", methods=['POST', 'GET'])
 def manga_page(id):  # Страница манги
     if request.method == 'GET':
@@ -358,7 +361,7 @@ def chapter_page(manga_id, chapter_id, page_number):  # Страница гла�
 
 
 @app.route("/search/<text>", methods=['POST', 'GET'])
-def search_page(text):      # обработчик страницы поиска
+def search_page(text):  # обработчик страницы поиска
     if request.method == 'GET':
         print(text)
         session = db_session.create_session()
@@ -367,12 +370,12 @@ def search_page(text):      # обработчик страницы поиска
         genres = []
         mangas = []
         for genre in a:
-            dop = genre.name_of_genre.lower() # поиск результатов
+            dop = genre.name_of_genre.lower()  # поиск результатов
             if dop in text or text in dop:
                 genres.append(genre)
         a = session.query(Manga).all()
         for manga in a:
-            dop = manga.name.lower()    # поиск результатов
+            dop = manga.name.lower()  # поиск результатов
             if dop in text or text in dop:
                 mangas.append(manga)
         return render_template("search_page.html", mangas=mangas, genres=genres, title="Поиск")
@@ -389,7 +392,7 @@ def handler():
 
 
 @app.route("/forum", methods=['POST', 'GET'])
-def forum():                        # обработчик страницы поиска
+def forum():  # обработчик страницы поиска
     if request.method == 'GET':
         session = db_session.create_session()
         messages = session.query(Message).all()
@@ -405,7 +408,7 @@ def forum():                        # обработчик страницы по
             sort = request.form["new_or_old"]
             if sort == 'Сначала новые':
                 messages.reverse()
-        if request.form["interested_theme"]:    # фильтрация по теме
+        if request.form["interested_theme"]:  # фильтрация по теме
             theme = request.form["interested_theme"]
             a = messages[:]
             messages = []
@@ -414,7 +417,7 @@ def forum():                        # обработчик страницы по
                 dop = message.name.lower()
                 if theme in dop or dop in theme:
                     messages.append(message)
-        if request.form["interested_author"]: # фильтарция по автору
+        if request.form["interested_author"]:  # фильтарция по автору
             author = request.form["interested_author"]
             a = messages[:]
             messages = []
@@ -423,7 +426,7 @@ def forum():                        # обработчик страницы по
                 dop = message.user.nickname.lower()
                 if author in dop or dop in author:
                     messages.append(message)
-        if request.form["date1"]:   # фильтрация по дате
+        if request.form["date1"]:  # фильтрация по дате
             date1 = request.form["date1"]
             a = messages[:]
             messages = []
@@ -447,7 +450,7 @@ def forum():                        # обработчик страницы по
                             continue
                         else:
                             messages.append(message)
-        if request.form["date2"]:   # фильтрация по дате
+        if request.form["date2"]:  # фильтрация по дате
             date2 = request.form["date2"]
             a = messages[:]
             messages = []
@@ -471,7 +474,7 @@ def forum():                        # обработчик страницы по
                             continue
                         else:
                             messages.append(message)
-        if request.form['time1']:   # фильтрация по времени
+        if request.form['time1']:  # фильтрация по времени
             time1 = [int(i) for i in request.form['time1'].split(':')]
             time1 = time1[0] * 60 + time1[1]
             a = messages[:]
@@ -483,7 +486,7 @@ def forum():                        # обработчик страницы по
                     continue
                 else:
                     messages.append(message)
-        if request.form['time1']:   # фильтрация по времени
+        if request.form['time1']:  # фильтрация по времени
             time1 = [int(i) for i in request.form['time1'].split(':')]
             time1 = time1[0] * 60 + time1[1]
             a = messages[:]
@@ -500,7 +503,7 @@ def forum():                        # обработчик страницы по
 
 
 @app.route("/forum/add_post", methods=['POST', 'GET'])
-def add_post():     # обработчик страницы добавления поста
+def add_post():  # обработчик страницы добавления поста
     session = db_session.create_session()
     form = MessageForm()
     if form.validate_on_submit():
@@ -510,7 +513,7 @@ def add_post():     # обработчик страницы добавления
         else:
             day = time.day
         if len(str(time.month)) == 1:
-            month = '0' + str(time.month) # извлечение даты
+            month = '0' + str(time.month)  # извлечение даты
         else:
             month = time.month
         if len(str(time.hour)) == 1:
@@ -523,7 +526,7 @@ def add_post():     # обработчик страницы добавления
             minute = time.minute
         time = '.'.join([str(day), str(month), str(time.year)]) + ' ' + \
                ':'.join([str(hour), str(minute)])
-        message = Message()             # извлечение всего остального
+        message = Message()  # извлечение всего остального
         message.name = form.name.data
         message.content = form.content.data
         message.user_id = current_user.id
@@ -537,14 +540,14 @@ def add_post():     # обработчик страницы добавления
 
 
 @app.route("/forum/change_post/<int:id>", methods=['POST', 'GET'])
-def change_post(id):    # обработчик страницы изменения поста
+def change_post(id):  # обработчик страницы изменения поста
     form = MessageForm()
     if request.method == "GET":
         session = db_session.create_session()
         message = session.query(Message).filter(Message.id == id,
                                                 Message.user == current_user).first()
         if message:
-            form.name.data = message.name   # занесение данных в форму
+            form.name.data = message.name  # занесение данных в форму
             form.content.data = message.content
         else:
             abort(404)
@@ -563,7 +566,7 @@ def change_post(id):    # обработчик страницы изменени
 
 
 @app.route("/forum/delete_post/<int:id>", methods=['POST', 'GET'])
-def delete_post(id):    # обработчик удаления поста
+def delete_post(id):  # обработчик удаления поста
     session = db_session.create_session()
     message = session.query(Message).filter(Message.id == id,
                                             Message.user == current_user).first()
@@ -588,10 +591,9 @@ def main():  # Добавление ресурсов для апи, инициа
     api.add_resource(mangas_resource.MangasListResource, '/api/mangas')
     api.add_resource(mangas_resource.MangasResource, '/api/manga/<int:manga_id>')
     api.add_resource(chapters_resource.ChaptersResource, '/api/chapter/<int:chapter_id>')
-    api.add_resource(messages_resource.MessagesListResource, '/api/messages')
-    api.add_resource(messages_resource.MessagesResource, '/api/message/<int:manga_id>')
     db_session.global_init("db/mangeil.sqlite")
-    app.run(port=8080, host="127.0.0.1")
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host='0.0.0.0', port=port)
 
 
 if __name__ == '__main__':
