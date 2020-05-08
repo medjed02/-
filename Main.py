@@ -86,7 +86,7 @@ def register():
                 cut_image = image_for_cut.crop((0, space, width, height - space))
             cut_image.save(image_filename)
         else:
-            image_filename = "/static/img/invariant/Hatsune_Miku.jpg"
+            image_filename = "static/img/invariant/Hatsune_Miku.jpg"
         user.avatar = image_filename
         session.commit()
         login_user(user, remember=False)
@@ -516,10 +516,10 @@ def add_post():  # обработчик страницы добавления п
             month = '0' + str(time.month)  # извлечение даты
         else:
             month = time.month
-        if len(str(time.hour)) == 1:
-            hour = '0' + str(time.hour)
+        if len(str(time.hour + 3)) == 1:
+            hour = '0' + str(time.hour + 3)
         else:
-            hour = time.hour
+            hour = time.hour + 3
         if len(str(time.minute)) == 1:
             minute = '0' + str(time.minute)
         else:
