@@ -43,6 +43,7 @@ class ChaptersResource(Resource):
                             str(chapter.manga_id) + "_manga/" + str(chapter_id) + "_chapter")
         shutil.rmtree(path)
         chapter.manga.chapters.remove(chapter)
+        session.commit()
         session.delete(chapter)
         session.commit()
         return jsonify({'success': 'OK'})

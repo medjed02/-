@@ -1,6 +1,7 @@
 from flask_restful import abort, Resource
 from data import db_session
 from data.mangas import Manga
+from data.users import User
 from flask import jsonify
 from data import parsers
 import shutil
@@ -41,10 +42,16 @@ class MangasResource(Resource):  # Ресурс манги
         manga = session.query(Manga).get(manga_id)
         for genre in manga.genres:
             genre.mangas.remove(manga)
-        path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../static/img/' + str(manga_id) + "_manga")
-        shutil.rmtree(path)
+        session.commit()
+        users = session.query(User).all()
+        for user in users:
+            if manga in user.mangas:
+                user.mangas.remove(manga)
+        session.commit()
         session.delete(manga)
         session.commit()
+        path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../static/img/' + str(manga_id) + "_manga")
+        shutil.rmtree(path)
         return jsonify({'success': 'OK'})
 
     def put(self, manga_id):  # Обработчик запроса на редактирование конкретной манги (с заданным id)
