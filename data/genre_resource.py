@@ -40,11 +40,12 @@ class GenresResource(Resource):  # Ресурс жанра
         genre = session.query(Genre).get(genre_id)
         for manga in genre.mangas:
             manga.genres.remove(genre)
+        session.commit()
+        session.delete(genre)
+        session.commit()
         path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../static/img/genres/' +
                             str(genre_id) + "_genre.jpg")
         os.remove(path)
-        session.delete(genre)
-        session.commit()
         return jsonify({'success': 'OK'})
 
     def put(self, genre_id):  # Обработчик запроса на редактирование конкретного жанра (с заданным id)
